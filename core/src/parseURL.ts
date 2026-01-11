@@ -1,49 +1,49 @@
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { HTTPS_PROTOCOL, SOLANA_PROTOCOL } from './constants.js';
-import type { Amount, Label, Link, Memo, Message, Recipient, Reference, SPLToken } from './types.js';
+import type { Amount, Label, Link, Memo, Message, Recipient, Reference, TPLToken } from './types.js';
 
 /**
- * A Solana Pay transaction request URL.
+ * A Trezoa Pay transaction request URL.
  */
 export interface TransactionRequestURL {
-    /** `link` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#link). */
+    /** `link` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#link). */
     link: Link;
-    /** `label` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#label-1). */
+    /** `label` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#label-1). */
     label: Label | undefined;
-    /** `message` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#message-1). */
+    /** `message` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#message-1). */
     message: Message | undefined;
 }
 
 /**
- * A Solana Pay transfer request URL.
+ * A Trezoa Pay transfer request URL.
  */
 export interface TransferRequestURL {
-    /** `recipient` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#recipient). */
+    /** `recipient` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#recipient). */
     recipient: Recipient;
-    /** `amount` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#amount). */
+    /** `amount` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#amount). */
     amount: Amount | undefined;
-    /** `spl-token` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#spl-token). */
-    splToken: SPLToken | undefined;
-    /** `reference` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#reference). */
+    /** `tpl-token` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#tpl-token). */
+    trzToken: TPLToken | undefined;
+    /** `reference` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#reference). */
     reference: Reference[] | undefined;
-    /** `label` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#label). */
+    /** `label` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#label). */
     label: Label | undefined;
-    /** `message` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#message). */
+    /** `message` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#message). */
     message: Message | undefined;
-    /** `memo` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#memo). */
+    /** `memo` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#memo). */
     memo: Memo | undefined;
 }
 
 /**
- * Thrown when a URL can't be parsed as a Solana Pay URL.
+ * Thrown when a URL can't be parsed as a Trezoa Pay URL.
  */
 export class ParseURLError extends Error {
     name = 'ParseURLError';
 }
 
 /**
- * Parse a Solana Pay URL.
+ * Parse a Trezoa Pay URL.
  *
  * @param url - URL to parse.
  *
@@ -93,13 +93,13 @@ function parseTransferRequestURL({ pathname, searchParams }: URL): TransferReque
         if (amount.isNegative()) throw new ParseURLError('amount negative');
     }
 
-    let splToken: PublicKey | undefined;
-    const splTokenParam = searchParams.get('spl-token');
-    if (splTokenParam != null) {
+    let trzToken: PublicKey | undefined;
+    const trzTokenParam = searchParams.get('tpl-token');
+    if (trzTokenParam != null) {
         try {
-            splToken = new PublicKey(splTokenParam);
+            trzToken = new PublicKey(trzTokenParam);
         } catch (error) {
-            throw new ParseURLError('spl-token invalid');
+            throw new ParseURLError('tpl-token invalid');
         }
     }
 
@@ -120,7 +120,7 @@ function parseTransferRequestURL({ pathname, searchParams }: URL): TransferReque
     return {
         recipient,
         amount,
-        splToken,
+        trzToken,
         reference,
         label,
         message,

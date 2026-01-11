@@ -1,5 +1,5 @@
-import type { Cluster } from '@solana/web3.js';
-import { clusterApiUrl, Connection } from '@solana/web3.js';
+import type { Cluster } from '@trezoa/web3.js';
+import { clusterApiUrl, Connection } from '@trezoa/web3.js';
 
 /**
  * Establish a connection to the cluster

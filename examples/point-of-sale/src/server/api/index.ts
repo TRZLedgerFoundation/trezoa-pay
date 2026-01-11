@@ -1,5 +1,5 @@
-import { createTransfer } from '@solana/pay';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { createTransfer } from '@trezoa/pay';
+import { PublicKey, Transaction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { NextApiHandler } from 'next';
 import { connection } from '../core';
@@ -15,7 +15,7 @@ const get: NextApiHandler<GetResponse> = async (request, response) => {
     if (!label) throw new Error('missing label');
     if (typeof label !== 'string') throw new Error('invalid label');
 
-    const icon = `https://${request.headers.host}/solana-pay-logo.svg`;
+    const icon = `https://${request.headers.host}/trezoa-pay-logo.svg`;
 
     response.status(200).send({
         label,
@@ -44,9 +44,9 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     if (typeof amountField !== 'string') throw new Error('invalid amount');
     const amount = new BigNumber(amountField);
 
-    const splTokenField = request.query['spl-token'];
-    if (splTokenField && typeof splTokenField !== 'string') throw new Error('invalid spl-token');
-    const splToken = splTokenField ? new PublicKey(splTokenField) : undefined;
+    const trzTokenField = request.query['tpl-token'];
+    if (trzTokenField && typeof trzTokenField !== 'string') throw new Error('invalid tpl-token');
+    const trzToken = trzTokenField ? new PublicKey(trzTokenField) : undefined;
 
     const referenceField = request.query.reference;
     if (!referenceField) throw new Error('missing reference');
@@ -71,7 +71,7 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     let transaction = await createTransfer(connection, account, {
         recipient,
         amount,
-        splToken,
+        trzToken,
         reference,
         memo,
     });

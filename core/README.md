@@ -1,10 +1,10 @@
-# Solana Pay
+# Trezoa Pay
 
-`@solana/pay` is a JavaScript library for facilitating commerce on Solana by using a token transfer URL scheme. The URL scheme ensures that no matter the wallet or service used, the payment request must be created and interpreted in one standard way.
+`@trezoa/pay` is a JavaScript library for facilitating commerce on Trezoa by using a token transfer URL scheme. The URL scheme ensures that no matter the wallet or service used, the payment request must be created and interpreted in one standard way.
 
-## Why use Solana Pay
+## Why use Trezoa Pay
 
-Businesses and developers can use Solana Pay to accept payments in SOL or any SPL token without intermediaries. It offers frictionless and portable integration options like payment links, pay now buttons or QR codes on your app, dApp, website, blog, and so much more.
+Businesses and developers can use Trezoa Pay to accept payments in SOL or any SPL token without intermediaries. It offers frictionless and portable integration options like payment links, pay now buttons or QR codes on your app, dApp, website, blog, and so much more.
 
 ## How it works
 
@@ -18,7 +18,7 @@ Payment requests can be encoded as a URL according to the scheme, scanned using 
 
 ![web app to browser wallet diagram](./dapp-web-wallet-flow.png)
 
-With a Solana Pay button, you could integrate an embeddable payment button that can be added to your existing app.
+With a Trezoa Pay button, you could integrate an embeddable payment button that can be added to your existing app.
 
 ### Mobile app to mobile wallet
 
@@ -28,28 +28,28 @@ Payment requests could be encoded as a deep link. The app prepares a payment req
 
 ## Getting Started
 
-Learn how to integrate Solana Pay in your website, application or wallet.
+Learn how to integrate Trezoa Pay in your website, application or wallet.
 
 ### Transaction Requests
 
-A Solana Pay transaction request URL describes an interactive request for any Solana transaction. The parameters in the URL are used by a wallet to make an HTTP request to compose any transaction.
+A Trezoa Pay transaction request URL describes an interactive request for any Trezoa transaction. The parameters in the URL are used by a wallet to make an HTTP request to compose any transaction.
 
-- [Create a transaction request](https://docs.solanapay.com/core/transaction-request/merchant-integration)
-- [Test a transaction request URL](https://glow.app/test/solana-pay)
+- [Create a transaction request](https://docs.trezoapay.com/core/transaction-request/merchant-integration)
+- [Test a transaction request URL](https://glow.app/test/trezoa-pay)
 
 ### Transfer Requests
 
-A Solana Pay transfer request URL describes a non-interactive request for a SOL or SPL Token transfer. The parameters in the URL are used by a wallet to directly compose the transaction.
+A Trezoa Pay transfer request URL describes a non-interactive request for a SOL or SPL Token transfer. The parameters in the URL are used by a wallet to directly compose the transaction.
 
-- [Create a transfer request](https://docs.solanapay.com/core/transfer-request/merchant-integration)
-- [Handle a transfer request](https://docs.solanapay.com/core/transfer-request/wallet-integration)
+- [Create a transfer request](https://docs.trezoapay.com/core/transfer-request/merchant-integration)
+- [Handle a transfer request](https://docs.trezoapay.com/core/transfer-request/wallet-integration)
 
 ## Other resources
 
-- [API Reference](https://docs.solanapay.com/api/core)
-- [Brand Guidelines](https://solanapay.com/branding)
-- [Solana Pay Buttons](https://www.figma.com/community/file/1070341985720702755)
+- [API Reference](https://docs.trezoapay.com/api/core)
+- [Brand Guidelines](https://trezoapay.com/branding)
+- [Trezoa Pay Buttons](https://www.figma.com/community/file/1070341985720702755)
 
 ## License
 
-The Solana Pay JavaScript SDK is open source and available under the Apache License, Version 2.0. See the [LICENSE](./LICENSE) file for more info.
+The Trezoa Pay JavaScript SDK is open source and available under the Apache License, Version 2.0. See the [LICENSE](./LICENSE) file for more info.

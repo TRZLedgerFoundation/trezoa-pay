@@ -1,28 +1,28 @@
-# Solana Pay Message Signing Specification
+# Trezoa Pay Message Signing Specification
 
 This spec is currently alpha and subject to change
 
 ## Summary
-A standard protocol to encode Solana Pay message-signing requests within URLs.
+A standard protocol to encode Trezoa Pay message-signing requests within URLs.
 
 ## Motivation
-A standard URL protocol for requesting message-signing allows for a better user experience across apps and wallets in the Solana ecosystem.
+A standard URL protocol for requesting message-signing allows for a better user experience across apps and wallets in the Trezoa ecosystem.
 
 These URLs may be encoded in QR codes or NFC tags, or sent between users.
 
 Applications should ensure that a signed message is valid before they grant access to objects or events.
 
-Mobile wallets should register to handle the URL scheme to provide a seamless yet secure experience when Solana Pay URLs are encountered in the environment.
+Mobile wallets should register to handle the URL scheme to provide a seamless yet secure experience when Trezoa Pay URLs are encountered in the environment.
 
 By standardizing a simple approach to solving these problems, we ensure basic compatibility of applications and wallets so developers can focus on higher level abstractions.
 
 ## Specification: Message Signing
 
-A Solana Pay sign-message request URL describes an interactive request where the parameters in the URL are used by a wallet to make an HTTP request to a remote server to verify ownership of an address.
+A Trezoa Pay sign-message request URL describes an interactive request where the parameters in the URL are used by a wallet to make an HTTP request to a remote server to verify ownership of an address.
 
 ### Link
 ```html
-solana:<link>
+trezoa:<link>
 ```
 
 A single `link` field is required as the pathname. The value must be a conditionally [URL-encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) absolute HTTPS URL.
@@ -76,9 +76,9 @@ The wallet must handle HTTP [client](https://developer.mozilla.org/en-US/docs/We
 {"data":"<data>","state":"<state>"}
 ```
 
-The `<data>` value must be arbitrary bytes, encoded as a base64 string. The wallet must base-64 decode and sign the `data` value with the private key that corresponds to the `account` in the request and send `data` and the resulting signature back to the server in the proceeding [PUT request](https://github.com/bedrock-foundation/solana-pay/edit/master/SPEC.md#put-request).
+The `<data>` value must be arbitrary bytes, encoded as a base64 string. The wallet must base-64 decode and sign the `data` value with the private key that corresponds to the `account` in the request and send `data` and the resulting signature back to the server in the proceeding [PUT request](https://github.com/bedrock-foundation/trezoa-pay/edit/master/SPEC.md#put-request).
 
-The `<state>` value must be a [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8) string value, and must contain a [MAC](https://en.wikipedia.org/wiki/Message_authentication_code). The wallet will pass this value back to the server in the [PUT request](https://github.com/bedrock-foundation/solana-pay/edit/master/SPEC.md#put-request) in order to verify that the contents of the `<data>` field were not modified.
+The `<state>` value must be a [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8) string value, and must contain a [MAC](https://en.wikipedia.org/wiki/Message_authentication_code). The wallet will pass this value back to the server in the [PUT request](https://github.com/bedrock-foundation/trezoa-pay/edit/master/SPEC.md#put-request) in order to verify that the contents of the `<data>` field were not modified.
 
 
 The application may also include an optional `message` field in the response body:
@@ -95,7 +95,7 @@ The application may also include an optional `redirect` field in the response bo
 {"redirect":"<redirect>", "message":"<message>","data":"<data>","state":"<state>"}
 ```
 
-The `redirect` field must be an absolute HTTPS or solana URL.
+The `redirect` field must be an absolute HTTPS or trezoa URL.
 
 If it is a HTTPS URL then the wallet should display the decoded value to the user. 
 
@@ -124,7 +124,7 @@ The wallet should display the domain of the URL as the request is being made. If
 
 The wallet must handle HTTP [client](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses) and [server](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) errors in accordance with the [error handling](#error-handling) specification. [Redirect responses](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages) must be handled appropriately. The application must respond with these, or with an HTTP `OK` response. An HTTP `OK` response indicates that signature verification was successful.
 
-If signature verification was successful and there was a `redirect` field in the POST response, then the decoded redirect URL should be followed. If the redirect is a HTTPS URL then the wallet should open the URL using any available browser. This may be a browser included in the wallet. If it is a `solana:` URL then the wallet should treat it as a new Solana Pay request.
+If signature verification was successful and there was a `redirect` field in the POST response, then the decoded redirect URL should be followed. If the redirect is a HTTPS URL then the wallet should open the URL using any available browser. This may be a browser included in the wallet. If it is a `trezoa:` URL then the wallet should treat it as a new Trezoa Pay request.
 
 The wallet and application should allow additional fields in the request body and response body, which may be added by future specification.
 
@@ -142,17 +142,17 @@ The wallet must display at least the first 80 characters of the `message` field 
 
 ##### URL describing a sign-message request.
 ```
-solana:https://example.com/solana-pay/sign-message
+trezoa:https://example.com/trezoa-pay/sign-message
 ```
 
 ##### URL describing a sign-message request with query parameters.
 ```
-solana:https%3A%2F%2Fexample.com%2Fsolana-pay%2Fsign-message%3Fid%3D678910
+trezoa:https%3A%2F%2Fexample.com%2Ftrezoa-pay%2Fsign-message%3Fid%3D678910
 ```
 
 ##### GET Request
 ```
-GET /solana-pay/sign-message?id=678910 HTTP/1.1
+GET /trezoa-pay/sign-message?id=678910 HTTP/1.1
 Host: example.com
 Connection: close
 Accept: application/json
@@ -172,7 +172,7 @@ Content-Encoding: gzip
 
 ##### POST Request
 ```
-POST /solana-pay/sign-message?id=678910 HTTP/1.1
+POST /trezoa-pay/sign-message?id=678910 HTTP/1.1
 Host: example.com
 Connection: close
 Accept: application/json
@@ -196,7 +196,7 @@ Content-Encoding: gzip
 
 ##### PUT Request
 ```
-POST /solana-pay/sign-message?id=678910 HTTP/1.1
+POST /trezoa-pay/sign-message?id=678910 HTTP/1.1
 Host: example.com
 Connection: close
 Accept: application/json

@@ -5,42 +5,42 @@ import {
     getMint,
     TOKEN_2022_PROGRAM_ID,
     TOKEN_PROGRAM_ID,
-} from '@solana/spl-token';
-import type { Commitment, Connection, GetLatestBlockhashConfig, PublicKey } from '@solana/web3.js';
-import { LAMPORTS_PER_SOL, SystemProgram, Transaction, TransactionInstruction } from '@solana/web3.js';
+} from '@trezoa/tpl-token';
+import type { Commitment, Connection, GetLatestBlockhashConfig, PublicKey } from '@trezoa/web3.js';
+import { LAMPORTS_PER_SOL, SystemProgram, Transaction, TransactionInstruction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { MEMO_PROGRAM_ID, SOL_DECIMALS, TEN } from './constants.js';
-import type { Amount, Memo, Recipient, References, SPLToken } from './types.js';
+import type { Amount, Memo, Recipient, References, TPLToken } from './types.js';
 
 /**
- * Thrown when a Solana Pay transfer transaction can't be created from the fields provided.
+ * Thrown when a Trezoa Pay transfer transaction can't be created from the fields provided.
  */
 export class CreateTransferError extends Error {
     name = 'CreateTransferError';
 }
 
 /**
- * Fields of a Solana Pay transfer request URL.
+ * Fields of a Trezoa Pay transfer request URL.
  */
 export interface CreateTransferFields {
-    /** `recipient` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#recipient). */
+    /** `recipient` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#recipient). */
     recipient: Recipient;
-    /** `amount` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#amount). */
+    /** `amount` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#amount). */
     amount: Amount;
-    /** `spl-token` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#spl-token). */
-    splToken?: SPLToken;
-    /** `reference` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#reference). */
+    /** `tpl-token` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#tpl-token). */
+    trzToken?: TPLToken;
+    /** `reference` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#reference). */
     reference?: References;
-    /** `memo` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#memo). */
+    /** `memo` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#memo). */
     memo?: Memo;
 }
 
 /**
- * Create a Solana Pay transfer transaction.
+ * Create a Trezoa Pay transfer transaction.
  *
  * @param connection - A connection to the cluster.
  * @param sender - Account that will send the transfer.
- * @param fields - Fields of a Solana Pay transfer request URL.
+ * @param fields - Fields of a Trezoa Pay transfer request URL.
  * @param options - Options for `getLatestBlockhash`.
  *
  * @throws {CreateTransferError}
@@ -48,7 +48,7 @@ export interface CreateTransferFields {
 export async function createTransfer(
     connection: Connection,
     sender: PublicKey,
-    { recipient, amount, splToken, reference, memo }: CreateTransferFields,
+    { recipient, amount, trzToken, reference, memo }: CreateTransferFields,
     { commitment }: { commitment?: Commitment | GetLatestBlockhashConfig } = {}
 ): Promise<Transaction> {
     // Check that the sender and recipient accounts exist
@@ -59,8 +59,8 @@ export async function createTransfer(
     if (!recipientInfo) throw new CreateTransferError('recipient not found');
 
     // A native SOL or SPL token transfer instruction
-    const instruction = splToken
-        ? await createSPLTokenInstruction(recipient, amount, splToken, sender, connection)
+    const instruction = trzToken
+        ? await createTPLTokenInstruction(recipient, amount, trzToken, sender, connection)
         : await createSystemInstruction(recipient, amount, sender, connection);
 
     // If reference accounts are provided, add them to the transfer instruction
@@ -133,21 +133,21 @@ async function createSystemInstruction(
     });
 }
 
-async function createSPLTokenInstruction(
+async function createTPLTokenInstruction(
     recipient: PublicKey,
     amount: BigNumber,
-    splToken: PublicKey,
+    trzToken: PublicKey,
     sender: PublicKey,
     connection: Connection
 ): Promise<TransactionInstruction> {
     // Check if token owns the Token-2022 Program
-    const accountInfo = await connection.getParsedAccountInfo(splToken);
+    const accountInfo = await connection.getParsedAccountInfo(trzToken);
     const accountOwner = accountInfo.value?.owner;
     const tokenProgram =
         accountOwner && accountOwner === TOKEN_2022_PROGRAM_ID ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID;
 
     // Check that the token provided is an initialized mint
-    const mint = await getMint(connection, splToken, undefined, tokenProgram);
+    const mint = await getMint(connection, trzToken, undefined, tokenProgram);
     if (!mint.isInitialized) throw new CreateTransferError('mint not initialized');
 
     // Check that the amount provided doesn't have greater precision than the mint
@@ -157,13 +157,13 @@ async function createSPLTokenInstruction(
     amount = amount.times(TEN.pow(mint.decimals)).integerValue(BigNumber.ROUND_FLOOR);
 
     // Get the sender's ATA and check that the account exists and can send tokens
-    const senderATA = await getAssociatedTokenAddress(splToken, sender, undefined, tokenProgram);
+    const senderATA = await getAssociatedTokenAddress(trzToken, sender, undefined, tokenProgram);
     const senderAccount = await getAccount(connection, senderATA, undefined, tokenProgram);
     if (!senderAccount.isInitialized) throw new CreateTransferError('sender not initialized');
     if (senderAccount.isFrozen) throw new CreateTransferError('sender frozen');
 
     // Get the recipient's ATA and check that the account exists and can receive tokens
-    const recipientATA = await getAssociatedTokenAddress(splToken, recipient, undefined, tokenProgram);
+    const recipientATA = await getAssociatedTokenAddress(trzToken, recipient, undefined, tokenProgram);
     const recipientAccount = await getAccount(connection, recipientATA, undefined, tokenProgram);
     if (!recipientAccount.isInitialized) throw new CreateTransferError('recipient not initialized');
     if (recipientAccount.isFrozen) throw new CreateTransferError('recipient frozen');
@@ -175,7 +175,7 @@ async function createSPLTokenInstruction(
     // Create an instruction to transfer SPL tokens, asserting the mint and decimals match
     return createTransferCheckedInstruction(
         senderATA,
-        splToken,
+        trzToken,
         recipientATA,
         sender,
         tokens,

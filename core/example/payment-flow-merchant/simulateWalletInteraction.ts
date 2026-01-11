@@ -1,5 +1,5 @@
-import type { Connection } from '@solana/web3.js';
-import { LAMPORTS_PER_SOL, sendAndConfirmTransaction } from '@solana/web3.js';
+import type { Connection } from '@trezoa/web3.js';
+import { LAMPORTS_PER_SOL, sendAndConfirmTransaction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import type { TransferRequestURL } from '../../lib/types.js';
 import { createTransfer, parseURL } from '../../src.js';
@@ -9,7 +9,7 @@ export async function simulateWalletInteraction(connection: Connection, url: URL
     /**
      * For example only
      *
-     * The URL that triggers the wallet interaction; follows the Solana Pay URL scheme
+     * The URL that triggers the wallet interaction; follows the Trezoa Pay URL scheme
      * The parameters needed to create the correct transaction is encoded within the URL
      */
     const { recipient, amount, reference, label, message, memo } = parseURL(url) as TransferRequestURL;

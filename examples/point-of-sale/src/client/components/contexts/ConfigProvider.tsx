@@ -1,4 +1,4 @@
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@trezoa/web3.js';
 import React, { FC, ReactElement, ReactNode } from 'react';
 import { ConfigContext } from '../../hooks/useConfig';
 import { Confirmations, Digits } from '../../types';
@@ -10,7 +10,7 @@ export interface ConfigProviderProps {
     recipient: PublicKey;
     label: string;
     message?: string;
-    splToken?: PublicKey;
+    trzToken?: PublicKey;
     symbol: string;
     icon: ReactElement;
     decimals: Digits;
@@ -26,7 +26,7 @@ export const ConfigProvider: FC<ConfigProviderProps> = ({
     recipient,
     label,
     message,
-    splToken,
+    trzToken,
     icon,
     symbol,
     decimals,
@@ -42,7 +42,7 @@ export const ConfigProvider: FC<ConfigProviderProps> = ({
                 recipient,
                 label,
                 message,
-                splToken,
+                trzToken,
                 symbol,
                 icon,
                 decimals,

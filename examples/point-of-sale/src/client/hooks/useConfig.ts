@@ -1,4 +1,4 @@
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@trezoa/web3.js';
 import { createContext, ReactElement, useContext } from 'react';
 import { Confirmations, Digits } from '../types';
 
@@ -8,7 +8,7 @@ export interface ConfigContextState {
     recipient: PublicKey;
     label: string;
     message?: string;
-    splToken: PublicKey | undefined;
+    trzToken: PublicKey | undefined;
     symbol: string;
     icon: ReactElement;
     decimals: Digits;

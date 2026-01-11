@@ -1,4 +1,4 @@
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { encodeURL, findReference, FindReferenceError, validateTransfer } from '../../src.js';
 import { MERCHANT_WALLET } from './constants.js';
@@ -7,7 +7,7 @@ import { simulateCheckout } from './simulateCheckout.js';
 import { simulateWalletInteraction } from './simulateWalletInteraction.js';
 
 async function main() {
-    console.log("Let's simulate a Solana Pay flow ... \n");
+    console.log("Let's simulate a Trezoa Pay flow ... \n");
     let paymentStatus: string;
 
     console.log('1. ✅ Establish connection to the cluster');
@@ -29,7 +29,7 @@ async function main() {
     /**
      * Create a payment request link
      *
-     * Solana Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+     * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
      * Several parameters are encoded within the link representing an intent to collect payment from a customer.
      */
     console.log('3. 💰 Create a payment request link \n');

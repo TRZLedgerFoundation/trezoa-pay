@@ -3,9 +3,9 @@ title: Create a transaction request
 slug: /core/transaction-request/merchant-integration
 ---
 
-This section describes how a merchant can integrate Solana Pay transaction requests into their payments flow.
+This section describes how a merchant can integrate Trezoa Pay transaction requests into their payments flow.
 
-This guide walks through an example of how you can configure a server to respond to a Solana Pay transaction request to initiate a simple native SOL transfer.
+This guide walks through an example of how you can configure a server to respond to a Trezoa Pay transaction request to initiate a simple native SOL transfer.
 
 A complete example can be found [here][4].
 
@@ -15,20 +15,20 @@ For this example, we'll be building our server using [NextJS API routes][1]. The
 
 ---
 
-## 1. Set-up Solana Pay
+## 1. Set-up Trezoa Pay
 
-Install Solana Pay libraries to access the API from your application:
+Install Trezoa Pay libraries to access the API from your application:
 
 **npm**
 
 ```shell
-npm install @solana/pay @solana/web3.js@1 bignumber.js @solana/spl-token --save
+npm install @trezoa/pay @trezoa/web3.js@1 bignumber.js @trezoa/tpl-token --save
 ```
 
 **yarn**
 
 ```shell
-yarn add @solana/pay @solana/web3.js@1 bignumber.js @solana/spl-token
+yarn add @trezoa/pay @trezoa/web3.js@1 bignumber.js @trezoa/tpl-token
 ```
 
 ### 1. Create the handler
@@ -47,19 +47,19 @@ const index = async (request, response) => {
 
 ## 2. The link
 
-A Solana Pay transaction request URL describes an interactive request for any Solana transaction.
+A Trezoa Pay transaction request URL describes an interactive request for any Trezoa transaction.
 
 ```html
-solana:<link>
+trezoa:<link>
 ```
 
 A single [link][3] field is required as the pathname. The value must be an absolute HTTPS URL. If the URL contains query parameters, it must be URL-encoded.
 
 ```html
-solana:https://example.solanapay.com
+trezoa:https://example.trezoapay.com
 ```
 
-Our server `https://example.solanapay.com` needs to be configured to respond correctly to `GET` and `POST` requests.
+Our server `https://example.trezoapay.com` needs to be configured to respond correctly to `GET` and `POST` requests.
 
 ## 3. The GET request
 
@@ -84,12 +84,12 @@ The `GET` endpoint should respond with two properties. `label` describes the sou
 The second part of the transaction request spec is the `POST` request.
 
 ```javascript
-import { clusterApiUrl, Connection, Keypair, PublicKey, VersionedTransaction } from '@solana/web3.js';
+import { clusterApiUrl, Connection, Keypair, PublicKey, VersionedTransaction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
-import { createTransferCheckedInstruction, getAccount, getAssociatedTokenAddress, getMint } from '@solana/spl-token';
-import { TEN } from '@solana/pay';
+import { createTransferCheckedInstruction, getAccount, getAssociatedTokenAddress, getMint } from '@trezoa/tpl-token';
+import { TEN } from '@trezoa/pay';
 
-const splToken = new PublicKey(process.env.USDC_MINT);
+const trzToken = new PublicKey(process.env.USDC_MINT);
 const MERCHANT_WALLET = new PublicKey(process.env.MERCHANT_WALLET);
 
 const post = async (request, response) => {
@@ -149,19 +149,19 @@ async function createSplTransferIx(sender, connection) {
     if (!senderInfo) throw new Error('sender not found');
 
     // Get the sender's ATA and check that the account exists and can send tokens
-    const senderATA = await getAssociatedTokenAddress(splToken, sender);
+    const senderATA = await getAssociatedTokenAddress(trzToken, sender);
     const senderAccount = await getAccount(connection, senderATA);
     if (!senderAccount.isInitialized) throw new Error('sender not initialized');
     if (senderAccount.isFrozen) throw new Error('sender frozen');
 
     // Get the merchant's ATA and check that the account exists and can receive tokens
-    const merchantATA = await getAssociatedTokenAddress(splToken, MERCHANT_WALLET);
+    const merchantATA = await getAssociatedTokenAddress(trzToken, MERCHANT_WALLET);
     const merchantAccount = await getAccount(connection, merchantATA);
     if (!merchantAccount.isInitialized) throw new Error('merchant not initialized');
     if (merchantAccount.isFrozen) throw new Error('merchant frozen');
 
     // Check that the token provided is an initialized mint
-    const mint = await getMint(connection, splToken);
+    const mint = await getMint(connection, trzToken);
     if (!mint.isInitialized) throw new Error('mint not initialized');
 
     // You should always calculate the order total on the server to prevent
@@ -176,7 +176,7 @@ async function createSplTransferIx(sender, connection) {
     // Create an instruction to transfer SPL tokens, asserting the mint and decimals match
     const splTransferIx = createTransferCheckedInstruction(
         senderATA,
-        splToken,
+        trzToken,
         merchantATA,
         sender,
         tokens,
@@ -199,7 +199,7 @@ For our example, we create a simple transfer for a SPL token, serialize the tran
 
 ## Best Practices
 
-We recommend handling a customer session in a secure environment. Building a secure integration with Solana Pay requires a payment flow as follows:
+We recommend handling a customer session in a secure environment. Building a secure integration with Trezoa Pay requires a payment flow as follows:
 
 ![](../../images/transaction-request-flow-dark.png)
 
@@ -213,6 +213,6 @@ We recommend handling a customer session in a secure environment. Building a sec
 <!-- References -->
 
 [1]: https://nextjs.org/docs/api-routes/introduction
-[2]: https://github.com/solana-labs/solana-pay/tree/master/point-of-sale
-[3]: https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#link
-[4]: https://github.com/solana-labs/solana-pay
+[2]: https://github.com/trzledgerfoundation/trezoa-pay/tree/master/point-of-sale
+[3]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#link
+[4]: https://github.com/trzledgerfoundation/trezoa-pay

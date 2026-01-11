@@ -7,11 +7,11 @@ import type {
     Mode,
     Options,
     TypeNumber,
-} from '@solana/qr-code-styling';
-import QRCodeStyling from '@solana/qr-code-styling';
+} from '@trezoa/qr-code-styling';
+import QRCodeStyling from '@trezoa/qr-code-styling';
 
 /**
- * Create a QR code from a Solana Pay URL.
+ * Create a QR code from a Trezoa Pay URL.
  *
  * @param url - The URL to encode.
  * @param size - Width and height in pixels.

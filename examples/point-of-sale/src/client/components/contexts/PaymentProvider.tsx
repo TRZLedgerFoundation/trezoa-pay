@@ -7,9 +7,9 @@ import {
     parseURL,
     validateTransfer,
     ValidateTransferError,
-} from '@solana/pay';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { ConfirmedSignatureInfo, Keypair, PublicKey, Transaction, TransactionSignature } from '@solana/web3.js';
+} from '@trezoa/pay';
+import { useConnection, useWallet } from '@trezoa/wallet-adapter-react';
+import { ConfirmedSignatureInfo, Keypair, PublicKey, Transaction, TransactionSignature } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -24,7 +24,7 @@ export interface PaymentProviderProps {
 
 export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     const { connection } = useConnection();
-    const { link, recipient, splToken, label, message, requiredConfirmations, connectWallet } = useConfig();
+    const { link, recipient, trzToken, label, message, requiredConfirmations, connectWallet } = useConfig();
     const { publicKey, sendTransaction } = useWallet();
 
     const router = useRouter();
@@ -61,8 +61,8 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
                 url.searchParams.append('amount', amount.toFixed(amount.decimalPlaces() ?? 0));
             }
 
-            if (splToken) {
-                url.searchParams.append('spl-token', splToken.toBase58());
+            if (trzToken) {
+                url.searchParams.append('tpl-token', trzToken.toBase58());
             }
 
             if (reference) {
@@ -86,14 +86,14 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
             return encodeURL({
                 recipient,
                 amount,
-                splToken,
+                trzToken,
                 reference,
                 label,
                 message,
                 memo,
             });
         }
-    }, [link, recipient, amount, splToken, reference, label, message, memo]);
+    }, [link, recipient, amount, trzToken, reference, label, message, memo]);
 
     const reset = useCallback(() => {
         setAmount(undefined);
@@ -127,13 +127,13 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
                         const { link } = request;
                         transaction = await fetchTransaction(connection, publicKey, link);
                     } else {
-                        const { recipient, amount, splToken, reference, memo } = request;
+                        const { recipient, amount, trzToken, reference, memo } = request;
                         if (!amount) return;
 
                         transaction = await createTransfer(connection, publicKey, {
                             recipient,
                             amount,
-                            splToken,
+                            trzToken,
                             reference,
                             memo,
                         });
@@ -194,7 +194,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
 
         const run = async () => {
             try {
-                await validateTransfer(connection, signature, { recipient, amount, splToken, reference });
+                await validateTransfer(connection, signature, { recipient, amount, trzToken, reference });
 
                 if (!changed) {
                     setStatus(PaymentStatus.Valid);
@@ -220,7 +220,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
             changed = true;
             clearTimeout(timeout);
         };
-    }, [status, signature, amount, connection, recipient, splToken, reference]);
+    }, [status, signature, amount, connection, recipient, trzToken, reference]);
 
     // When the status is valid, poll for confirmations until the transaction is finalized
     useEffect(() => {

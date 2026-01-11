@@ -1,11 +1,11 @@
-import { Keypair, type PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+import { Keypair, type PublicKey, SystemProgram, Transaction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { createTransfer, CreateTransferError } from '../src';
-import type { Connection } from '@solana/web3.js';
-import * as spl from '@solana/spl-token';
+import type { Connection } from '@trezoa/web3.js';
+import * as spl from '@trezoa/tpl-token';
 
-jest.mock('@solana/spl-token', () => {
-    const actual = jest.requireActual('@solana/spl-token');
+jest.mock('@trezoa/tpl-token', () => {
+    const actual = jest.requireActual('@trezoa/tpl-token');
     return {
         ...actual,
         getMint: jest.fn(),
@@ -14,7 +14,7 @@ jest.mock('@solana/spl-token', () => {
     };
 });
 
-const mockedSplToken = jest.mocked(spl);
+const mockedTplToken = jest.mocked(spl);
 
 // Test Constants
 const TEST_AMOUNTS = {
@@ -23,8 +23,8 @@ const TEST_AMOUNTS = {
 } as const;
 
 const TEST_BALANCES = {
-    SENDER_SOL: 1000000000, // 1 SOL in lamports
-    RECIPIENT_SOL: 0,
+    SENDER_TRZ: 1000000000, // 1 TRZ in lamports
+    RECIPIENT_TRZ: 0,
     SENDER_TOKENS: BigInt(1000000), // 1 token with 6 decimals
     RECIPIENT_TOKENS: BigInt(0),
     INSUFFICIENT_TOKENS: BigInt(1),
@@ -41,7 +41,7 @@ const MOCK_VALUES = {
 class TestFixtures {
     readonly sender = Keypair.generate().publicKey;
     readonly recipient = Keypair.generate().publicKey;
-    readonly splToken = Keypair.generate().publicKey;
+    readonly tplToken = Keypair.generate().publicKey;
     readonly mintAuthority = Keypair.generate().publicKey;
     readonly senderATA = Keypair.generate().publicKey;
     readonly recipientATA = Keypair.generate().publicKey;
@@ -126,26 +126,26 @@ class TestHelpers {
     static setupBasicMocks(connection: jest.Mocked<Connection>, fixtures: TestFixtures) {
         connection.getLatestBlockhash.mockResolvedValue(MockFactories.createBlockhash());
 
-        // Setup sender and recipient accounts for SOL transfers
+        // Setup sender and recipient accounts for TRZ transfers
         connection.getAccountInfo
-            .mockResolvedValueOnce(MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_SOL))
+            .mockResolvedValueOnce(MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_TRZ))
             .mockResolvedValueOnce(
-                MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.RECIPIENT_SOL)
+                MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.RECIPIENT_TRZ)
             );
     }
 
-    static setupSolTransferMocks(connection: jest.Mocked<Connection>, fixtures: TestFixtures) {
+    static setupTrzTransferMocks(connection: jest.Mocked<Connection>, fixtures: TestFixtures) {
         this.setupBasicMocks(connection, fixtures);
 
         // Additional calls for the SystemProgram instruction creation
         connection.getAccountInfo
-            .mockResolvedValueOnce(MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_SOL))
+            .mockResolvedValueOnce(MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_TRZ))
             .mockResolvedValueOnce(
-                MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.RECIPIENT_SOL)
+                MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.RECIPIENT_TRZ)
             );
     }
 
-    static setupSplTokenMocks(
+    static setupTplTokenMocks(
         connection: jest.Mocked<Connection>,
         fixtures: TestFixtures,
         tokenProgram: PublicKey = spl.TOKEN_PROGRAM_ID
@@ -156,22 +156,22 @@ class TestHelpers {
         connection.getParsedAccountInfo.mockResolvedValue(MockFactories.createParsedAccountInfo(tokenProgram));
 
         // Mock mint and token accounts
-        mockedSplToken.getMint.mockResolvedValue(
+        mockedTplToken.getMint.mockResolvedValue(
             MockFactories.createMint({
-                address: fixtures.splToken,
+                address: fixtures.tplToken,
                 mintAuthority: fixtures.mintAuthority,
             })
         );
 
-        mockedSplToken.getAssociatedTokenAddress
+        mockedTplToken.getAssociatedTokenAddress
             .mockResolvedValueOnce(fixtures.senderATA)
             .mockResolvedValueOnce(fixtures.recipientATA);
 
-        mockedSplToken.getAccount
+        mockedTplToken.getAccount
             .mockResolvedValueOnce(
                 MockFactories.createTokenAccount({
                     address: fixtures.senderATA,
-                    mint: fixtures.splToken,
+                    mint: fixtures.tplToken,
                     owner: fixtures.sender,
                     amount: TEST_BALANCES.SENDER_TOKENS,
                 })
@@ -179,14 +179,14 @@ class TestHelpers {
             .mockResolvedValueOnce(
                 MockFactories.createTokenAccount({
                     address: fixtures.recipientATA,
-                    mint: fixtures.splToken,
+                    mint: fixtures.tplToken,
                     owner: fixtures.recipient,
                     amount: TEST_BALANCES.RECIPIENT_TOKENS,
                 })
             );
     }
 
-    static assertSplTokenTransfer(transaction: Transaction, fixtures: TestFixtures, tokenProgram: PublicKey) {
+    static assertTplTokenTransfer(transaction: Transaction, fixtures: TestFixtures, tokenProgram: PublicKey) {
         expect(transaction).toBeInstanceOf(Transaction);
         expect(transaction.instructions.length).toBeGreaterThan(0);
 
@@ -226,9 +226,9 @@ describe('createTransfer', () => {
         jest.clearAllMocks();
     });
 
-    describe('SOL transfers', () => {
-        it('should create a valid SOL transfer transaction', async () => {
-            TestHelpers.setupSolTransferMocks(connection, fixtures);
+    describe('TRZ transfers', () => {
+        it('should create a valid TRZ transfer transaction', async () => {
+            TestHelpers.setupTrzTransferMocks(connection, fixtures);
 
             const transaction = await createTransfer(connection, fixtures.sender, {
                 recipient: fixtures.recipient,
@@ -254,7 +254,7 @@ describe('createTransfer', () => {
         it('should throw when recipient account does not exist', async () => {
             connection.getAccountInfo
                 .mockResolvedValueOnce(
-                    MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_SOL)
+                    MockFactories.createAccountInfo(SystemProgram.programId, TEST_BALANCES.SENDER_TRZ)
                 )
                 .mockResolvedValueOnce(null);
 
@@ -267,43 +267,43 @@ describe('createTransfer', () => {
         });
     });
 
-    describe('SPL Token transfers', () => {
-        it('should create a valid SPL token transfer transaction', async () => {
-            TestHelpers.setupSplTokenMocks(connection, fixtures);
+    describe('TPL Token transfers', () => {
+        it('should create a valid TPL token transfer transaction', async () => {
+            TestHelpers.setupTplTokenMocks(connection, fixtures);
 
             const transaction = await createTransfer(connection, fixtures.sender, {
                 recipient: fixtures.recipient,
                 amount: TEST_AMOUNTS.ONE_TOKEN,
-                splToken: fixtures.splToken,
+                tplToken: fixtures.tplToken,
             });
 
-            TestHelpers.assertSplTokenTransfer(transaction, fixtures, spl.TOKEN_PROGRAM_ID);
-            expect(mockedSplToken.getMint).toHaveBeenCalledTimes(1);
-            expect(mockedSplToken.getAccount).toHaveBeenCalledTimes(2);
+            TestHelpers.assertTplTokenTransfer(transaction, fixtures, spl.TOKEN_PROGRAM_ID);
+            expect(mockedTplToken.getMint).toHaveBeenCalledTimes(1);
+            expect(mockedTplToken.getAccount).toHaveBeenCalledTimes(2);
         });
 
         it('should create a valid Token-2022 transfer transaction', async () => {
-            TestHelpers.setupSplTokenMocks(connection, fixtures, spl.TOKEN_2022_PROGRAM_ID);
+            TestHelpers.setupTplTokenMocks(connection, fixtures, spl.TOKEN_2022_PROGRAM_ID);
 
             const transaction = await createTransfer(connection, fixtures.sender, {
                 recipient: fixtures.recipient,
                 amount: TEST_AMOUNTS.ONE_TOKEN,
-                splToken: fixtures.splToken,
+                tplToken: fixtures.tplToken,
             });
 
-            TestHelpers.assertSplTokenTransfer(transaction, fixtures, spl.TOKEN_2022_PROGRAM_ID);
+            TestHelpers.assertTplTokenTransfer(transaction, fixtures, spl.TOKEN_2022_PROGRAM_ID);
         });
 
-        describe('SPL Token validation errors', () => {
+        describe('TPL Token validation errors', () => {
             it('should throw when mint is not initialized', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                         isInitialized: false,
                     })
@@ -313,7 +313,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.ONE_TOKEN,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });
@@ -324,18 +324,18 @@ describe('createTransfer', () => {
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                     })
                 );
 
-                mockedSplToken.getAssociatedTokenAddress.mockResolvedValueOnce(fixtures.senderATA);
-                mockedSplToken.getAccount.mockResolvedValueOnce(
+                mockedTplToken.getAssociatedTokenAddress.mockResolvedValueOnce(fixtures.senderATA);
+                mockedTplToken.getAccount.mockResolvedValueOnce(
                     MockFactories.createTokenAccount({
                         address: fixtures.senderATA,
-                        mint: fixtures.splToken,
+                        mint: fixtures.tplToken,
                         owner: fixtures.sender,
                         isInitialized: false,
                     })
@@ -345,7 +345,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.ONE_TOKEN,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });
@@ -356,18 +356,18 @@ describe('createTransfer', () => {
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                     })
                 );
 
-                mockedSplToken.getAssociatedTokenAddress.mockResolvedValueOnce(fixtures.senderATA);
-                mockedSplToken.getAccount.mockResolvedValueOnce(
+                mockedTplToken.getAssociatedTokenAddress.mockResolvedValueOnce(fixtures.senderATA);
+                mockedTplToken.getAccount.mockResolvedValueOnce(
                     MockFactories.createTokenAccount({
                         address: fixtures.senderATA,
-                        mint: fixtures.splToken,
+                        mint: fixtures.tplToken,
                         owner: fixtures.sender,
                         isFrozen: true,
                         amount: TEST_BALANCES.SENDER_TOKENS,
@@ -378,7 +378,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.ONE_TOKEN,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });
@@ -389,22 +389,22 @@ describe('createTransfer', () => {
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                     })
                 );
 
-                mockedSplToken.getAssociatedTokenAddress
+                mockedTplToken.getAssociatedTokenAddress
                     .mockResolvedValueOnce(fixtures.senderATA)
                     .mockResolvedValueOnce(fixtures.recipientATA);
 
-                mockedSplToken.getAccount
+                mockedTplToken.getAccount
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.senderATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.sender,
                             amount: TEST_BALANCES.SENDER_TOKENS,
                         })
@@ -412,7 +412,7 @@ describe('createTransfer', () => {
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.recipientATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.recipient,
                             isInitialized: false,
                         })
@@ -422,7 +422,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.ONE_TOKEN,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });
@@ -433,22 +433,22 @@ describe('createTransfer', () => {
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                     })
                 );
 
-                mockedSplToken.getAssociatedTokenAddress
+                mockedTplToken.getAssociatedTokenAddress
                     .mockResolvedValueOnce(fixtures.senderATA)
                     .mockResolvedValueOnce(fixtures.recipientATA);
 
-                mockedSplToken.getAccount
+                mockedTplToken.getAccount
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.senderATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.sender,
                             amount: TEST_BALANCES.SENDER_TOKENS,
                         })
@@ -456,7 +456,7 @@ describe('createTransfer', () => {
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.recipientATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.recipient,
                             isFrozen: true,
                         })
@@ -466,7 +466,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.ONE_TOKEN,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });
@@ -477,22 +477,22 @@ describe('createTransfer', () => {
                     MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
                 );
 
-                mockedSplToken.getMint.mockResolvedValue(
+                mockedTplToken.getMint.mockResolvedValue(
                     MockFactories.createMint({
-                        address: fixtures.splToken,
+                        address: fixtures.tplToken,
                         mintAuthority: fixtures.mintAuthority,
                     })
                 );
 
-                mockedSplToken.getAssociatedTokenAddress
+                mockedTplToken.getAssociatedTokenAddress
                     .mockResolvedValueOnce(fixtures.senderATA)
                     .mockResolvedValueOnce(fixtures.recipientATA);
 
-                mockedSplToken.getAccount
+                mockedTplToken.getAccount
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.senderATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.sender,
                             amount: TEST_BALANCES.INSUFFICIENT_TOKENS,
                         })
@@ -500,7 +500,7 @@ describe('createTransfer', () => {
                     .mockResolvedValueOnce(
                         MockFactories.createTokenAccount({
                             address: fixtures.recipientATA,
-                            mint: fixtures.splToken,
+                            mint: fixtures.tplToken,
                             owner: fixtures.recipient,
                         })
                     );
@@ -509,7 +509,7 @@ describe('createTransfer', () => {
                     createTransfer(connection, fixtures.sender, {
                         recipient: fixtures.recipient,
                         amount: TEST_AMOUNTS.TWO_TOKENS,
-                        splToken: fixtures.splToken,
+                        tplToken: fixtures.tplToken,
                     })
                 ).rejects.toThrow(CreateTransferError);
             });

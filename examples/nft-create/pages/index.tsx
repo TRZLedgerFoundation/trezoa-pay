@@ -1,12 +1,12 @@
-import { createQR, encodeURL, TransactionRequestURLFields } from '@solana/pay'
+import { createQR, encodeURL, TransactionRequestURLFields } from '@trezoa/pay'
 import { useEffect, useRef } from 'react'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useConnection, useWallet } from '@trezoa/wallet-adapter-react';
+import { WalletMultiButton } from '@trezoa/wallet-adapter-react-ui';
 import {
   PostResponse as CheckoutPostResponse,
   PostError as CheckoutPostError,
 } from './api/checkout'
-import { Transaction } from '@solana/web3.js';
+import { Transaction } from '@trezoa/web3.js';
 
 export default function Home() {
   const { connection } = useConnection()
@@ -14,7 +14,7 @@ export default function Home() {
 
   const mintQrRef = useRef<HTMLDivElement>()
 
-  // Generate the Solana Pay QR code
+  // Generate the Trezoa Pay QR code
   // This is a transaction request, with our checkout API as the link
   // We can only generate a QR code on the client, so do it in the useEffect
   useEffect(() => {

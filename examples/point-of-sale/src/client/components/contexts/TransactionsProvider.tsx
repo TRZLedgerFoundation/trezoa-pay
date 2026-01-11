@@ -1,5 +1,5 @@
-import { getAssociatedTokenAddress } from '@solana/spl-token';
-import { useConnection } from '@solana/wallet-adapter-react';
+import { getAssociatedTokenAddress } from '@trezoa/tpl-token';
+import { useConnection } from '@trezoa/wallet-adapter-react';
 import {
     LAMPORTS_PER_SOL,
     ParsedTransactionWithMeta,
@@ -7,7 +7,7 @@ import {
     RpcResponseAndContext,
     SignatureStatus,
     TransactionSignature,
-} from '@solana/web3.js';
+} from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
@@ -25,7 +25,7 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({ children, 
     pollInterval ||= 10000;
 
     const { connection } = useConnection();
-    const { recipient, splToken } = useConfig();
+    const { recipient, trzToken } = useConfig();
     const [associatedToken, setAssociatedToken] = useState<PublicKey>();
     const [signatures, setSignatures] = useState<TransactionSignature[]>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -33,14 +33,14 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({ children, 
 
     // Get the ATA for the recipient and token
     useEffect(() => {
-        if (!splToken) {
+        if (!trzToken) {
             return;
         }
 
         let changed = false;
 
         (async () => {
-            const associatedToken = await getAssociatedTokenAddress(splToken, recipient);
+            const associatedToken = await getAssociatedTokenAddress(trzToken, recipient);
             if (changed) return;
 
             setAssociatedToken(associatedToken);
@@ -50,7 +50,7 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({ children, 
             changed = true;
             setAssociatedToken(undefined);
         };
-    }, [splToken, recipient]);
+    }, [trzToken, recipient]);
 
     // Poll for signatures referencing the associated token account
     useEffect(() => {
@@ -154,7 +154,7 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({ children, 
                             postAmount = new BigNumber(postBalance).div(LAMPORTS_PER_SOL);
                         } else {
                             // Include only TokenProgram.transfer / TokenProgram.transferChecked instructions
-                            if (!(program === 'spl-token' && (type === 'transfer' || type === 'transferChecked')))
+                            if (!(program === 'tpl-token' && (type === 'transfer' || type === 'transferChecked')))
                                 return;
 
                             // Include only transfers to the recipient ATA

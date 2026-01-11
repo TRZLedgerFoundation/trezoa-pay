@@ -1,5 +1,5 @@
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useWalletModal, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useWallet } from '@trezoa/wallet-adapter-react';
+import { useWalletModal, WalletMultiButton } from '@trezoa/wallet-adapter-react-ui';
 import { NextPage } from 'next';
 import React, { useEffect } from 'react';
 import { useConfig } from '../../hooks/useConfig';
@@ -36,7 +36,7 @@ const PendingPage: NextPage = () => {
                 <div className={css.code}>
                     <QRCode />
                 </div>
-                <div className={css.scan}>Scan this code with your Solana Pay wallet</div>
+                <div className={css.scan}>Scan this code with your Trezoa Pay wallet</div>
                 <div className={css.confirm}>You'll be asked to approve the transaction</div>
             </div>
             <div className={css.footer}>

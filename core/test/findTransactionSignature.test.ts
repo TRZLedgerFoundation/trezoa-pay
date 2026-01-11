@@ -1,5 +1,5 @@
-import type { Connection, PublicKey } from '@solana/web3.js';
-import { Keypair } from '@solana/web3.js';
+import type { Connection, PublicKey } from '@trezoa/web3.js';
+import { Keypair } from '@trezoa/web3.js';
 import { findReference } from '../src';
 
 const reference = Keypair.generate().publicKey;

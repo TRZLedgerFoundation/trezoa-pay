@@ -1,14 +1,14 @@
-# Contributing to Solana Pay
+# Contributing to Trezoa Pay
 
-Thank you for your interest in contributing to Solana Pay! All contributions are welcome no
+Thank you for your interest in contributing to Trezoa Pay! All contributions are welcome no
 matter how big or small. This includes (but is not limited to) filing issues,
 adding documentation, fixing bugs, creating examples, and implementing features.
 
 ## Finding issues to work on
 
 If you're looking to get started,
-check out [good first issues](https://github.com/solana-foundation/solana-pay/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-or issues where [help is wanted](https://github.com/solana-foundation/solana-pay/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+check out [good first issues](https://github.com/trezoa-foundation/trezoa-pay/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+or issues where [help is wanted](https://github.com/trezoa-foundation/trezoa-pay/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 For simple documentation changes or typos, feel free to just open a pull request.
 
 ## Choosing an issue

@@ -1,8 +1,8 @@
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { GlowWalletAdapter, PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { PublicKey } from '@solana/web3.js';
+import { WalletAdapterNetwork } from '@trezoa/wallet-adapter-base';
+import { ConnectionProvider, WalletProvider } from '@trezoa/wallet-adapter-react';
+import { WalletModalProvider } from '@trezoa/wallet-adapter-react-ui';
+import { GlowWalletAdapter, PhantomWalletAdapter, SolflareWalletAdapter } from '@trezoa/wallet-adapter-wallets';
+import { PublicKey } from '@trezoa/web3.js';
 import { AppContext, AppProps as NextAppProps, default as NextApp } from 'next/app';
 import { AppInitialProps } from 'next/dist/shared/lib/utils';
 import { FC, useMemo } from 'react';
@@ -12,8 +12,8 @@ import { FullscreenProvider } from '../contexts/FullscreenProvider';
 import { PaymentProvider } from '../contexts/PaymentProvider';
 import { ThemeProvider } from '../contexts/ThemeProvider';
 import { TransactionsProvider } from '../contexts/TransactionsProvider';
-import { SolanaPayLogo } from '../images/SolanaPayLogo';
-import { SOLIcon } from '../images/SOLIcon';
+import { TrezoaPayLogo } from '../images/TrezoaPayLogo';
+import { TRZIcon } from '../images/TRZIcon';
 import css from './App.module.css';
 
 interface AppProps extends NextAppProps {
@@ -75,7 +75,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                                     label={label}
                                     message={message}
                                     symbol="SOL"
-                                    icon={<SOLIcon />}
+                                    icon={<TRZIcon />}
                                     decimals={9}
                                     minDecimals={1}
                                     connectWallet={connectWallet}
@@ -91,7 +91,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                     </ConnectionProvider>
                 ) : (
                     <div className={css.logo}>
-                        <SolanaPayLogo width={240} height={88} />
+                        <TrezoaPayLogo width={240} height={88} />
                     </div>
                 )}
             </FullscreenProvider>

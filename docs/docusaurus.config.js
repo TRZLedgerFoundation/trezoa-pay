@@ -8,16 +8,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-    title: 'Solana Pay Docs',
+    title: 'Trezoa Pay Docs',
     tagline:
-        'Solana Pay is a standard protocol and set of reference implementations that enable developers to incorporate decentralized payments into their apps and services.',
-    url: 'https://docs.solanapay.com',
+        'Trezoa Pay is a standard protocol and set of reference implementations that enable developers to incorporate decentralized payments into their apps and services.',
+    url: 'https://docs.trezoapay.com',
     baseUrl: '/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/favicon.ico',
-    organizationName: 'solana-labs', // Usually your GitHub org/user name.
-    projectName: 'solana-pay', // Usually your repo name.
+    organizationName: 'trzledgerfoundation', // Usually your GitHub org/user name.
+    projectName: 'trezoa-pay', // Usually your repo name.
 
     presets: [
         [
@@ -29,7 +29,7 @@ const config = {
                     sidebarCollapsed: false,
                     path: 'src',
                     routeBasePath: '/',
-                    editUrl: 'https://github.com/solana-labs/solana-pay/tree/master/docs',
+                    editUrl: 'https://github.com/trzledgerfoundation/trezoa-pay/tree/master/docs',
                 },
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),
@@ -57,13 +57,13 @@ const config = {
             },
             navbar: {
                 logo: {
-                    alt: 'Solana Logo',
+                    alt: 'Trezoa Logo',
                     src: 'img/logo-horizontal.svg',
                     srcDark: 'img/logo-horizontal-dark.svg',
                 },
                 items: [
                     {
-                        href: 'https://github.com/solana-labs/solana-pay',
+                        href: 'https://github.com/trzledgerfoundation/trezoa-pay',
                         label: 'GitHub',
                         position: 'right',
                     },
@@ -82,15 +82,15 @@ const config = {
                         items: [
                             {
                                 label: 'Stack Exchange',
-                                href: 'https://solana.stackexchange.com',
+                                href: 'https://trezoa.stackexchange.com',
                             },
                             {
                                 label: 'Twitter',
-                                href: 'https://twitter.com/solana',
+                                href: 'https://twitter.com/trezoa',
                             },
                             {
                                 label: 'Forums',
-                                href: 'https://forums.solana.com',
+                                href: 'https://forums.trezoa.com',
                             },
                         ],
                     },
@@ -99,12 +99,12 @@ const config = {
                         items: [
                             {
                                 label: 'GitHub',
-                                href: 'https://github.com/solana-labs/solana-pay',
+                                href: 'https://github.com/trzledgerfoundation/trezoa-pay',
                             },
                         ],
                     },
                 ],
-                copyright: `Copyright © ${new Date().getFullYear()} Solana Foundation`,
+                copyright: `Copyright © ${new Date().getFullYear()} Trezoa Foundation`,
             },
             prism: {
                 theme: lightCodeTheme,

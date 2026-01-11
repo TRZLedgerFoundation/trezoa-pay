@@ -1,5 +1,5 @@
-import { bundlrStorage, keypairIdentity, Metaplex, toMetaplexFile } from "@metaplex-foundation/js"
-import { clusterApiUrl, Connection, Keypair } from "@solana/web3.js"
+import { bundlrStorage, keypairIdentity, Trezoaplex, toTrezoaplexFile } from "@trezoaplex-foundation/js"
+import { clusterApiUrl, Connection, Keypair } from "@trezoa/web3.js"
 import base58 from "bs58"
 import * as dotenv from "dotenv"
 import * as fs from "fs"
@@ -32,7 +32,7 @@ async function main() {
 
   const connection = new Connection(ENDPOINT)
 
-  const nfts = Metaplex
+  const nfts = Trezoaplex
     .make(connection, { cluster: 'devnet' })
     .use(keypairIdentity(shopKeypair))
     .use(bundlrStorage({
@@ -43,7 +43,7 @@ async function main() {
     .nfts();
 
   const imageBuffer = fs.readFileSync(NFT_IMAGE_PATH)
-  const file = toMetaplexFile(imageBuffer, NFT_FILE_NAME)
+  const file = toTrezoaplexFile(imageBuffer, NFT_FILE_NAME)
 
   const uploadedMetadata = await nfts.uploadMetadata({
     name: NFT_NAME,

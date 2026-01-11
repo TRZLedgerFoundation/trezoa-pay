@@ -1,5 +1,5 @@
-import { createAssociatedTokenAccount } from '@solana/spl-token';
-import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, sendAndConfirmRawTransaction } from '@solana/web3.js';
+import { createAssociatedTokenAccount } from '@trezoa/tpl-token';
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, sendAndConfirmRawTransaction } from '@trezoa/web3.js';
 import type { TransferRequestURL } from '../src.js';
 import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } from '../src.js';
 
@@ -12,7 +12,7 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
     const originalReference = Keypair.generate().publicKey;
 
     const NATIVE_URL =
-        'solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN' +
+        'trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN' +
         '?amount=0.01' +
         '&reference=' +
         encodeURIComponent(String(originalReference)) +
@@ -21,9 +21,9 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
         '&memo=OrderId5678';
 
     const USDC_URL =
-        'solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN' +
+        'trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN' +
         '?amount=0.01' +
-        '&spl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' +
+        '&tpl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' +
         '&reference=' +
         encodeURIComponent(String(originalReference)) +
         '&label=Michael' +
@@ -34,12 +34,12 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
     console.log(originalURL);
 
     // Wallet gets URL from deep link / QR code
-    const { recipient, amount, splToken, reference, label, message, memo } = parseURL(
+    const { recipient, amount, trzToken, reference, label, message, memo } = parseURL(
         originalURL
     ) as TransferRequestURL;
 
     // Apps can encode the URL from the required and optional parameters
-    const encodedURL = encodeURL({ recipient, amount, splToken, reference, label, message, memo });
+    const encodedURL = encodeURL({ recipient, amount, trzToken, reference, label, message, memo });
 
     console.log(originalURL);
     console.log(encodedURL);
@@ -50,15 +50,15 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
     const airdrop = await connection.requestAirdrop(wallet.publicKey, LAMPORTS_PER_SOL);
     await connection.confirmTransaction(airdrop, 'confirmed');
 
-    if (splToken) {
-        await createAssociatedTokenAccount(connection, wallet, splToken, wallet.publicKey, { commitment: 'confirmed' });
+    if (trzToken) {
+        await createAssociatedTokenAccount(connection, wallet, trzToken, wallet.publicKey, { commitment: 'confirmed' });
     }
 
     // Create a transaction to transfer native SOL or SPL tokens
     const transaction = await createTransfer(connection, wallet.publicKey, {
         recipient,
         amount,
-        splToken,
+        trzToken,
         reference,
         memo,
     });
@@ -84,7 +84,7 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
     const response = await validateTransfer(connection, found.signature, {
         recipient,
         amount,
-        splToken,
+        trzToken,
         reference,
         memo,
     });

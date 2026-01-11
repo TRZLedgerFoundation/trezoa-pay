@@ -1,9 +1,9 @@
 {
     "private": true,
-    "name": "@solana/pay-docs",
+    "name": "@trezoa/pay-docs",
     "version": "0.0.0",
-    "author": "Solana Maintainers <maintainers@solana.foundation>",
-    "repository": "https://github.com/solana-labs/wallet-adapter",
+    "author": "Trezoa Maintainers <maintainers@trezoa.foundation>",
+    "repository": "https://github.com/trzledgerfoundation/wallet-adapter",
     "license": "Apache-2.0",
     "engines": {
         "node": ">=16"

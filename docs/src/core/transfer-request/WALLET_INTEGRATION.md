@@ -9,20 +9,20 @@ This guide walks through an **example** implementation for wallet providers. The
 
 ---
 
-## 1. Set up Solana Pay
+## 1. Set up Trezoa Pay
 
 Install the packages and import them in your code.
 
 **npm**
 
 ```shell=
-npm install @solana/pay @solana/web3.js@1 --save
+npm install @trezoa/pay @trezoa/web3.js@1 --save
 ```
 
 **yarn**
 
 ```shell=
-yarn add @solana/pay @solana/web3.js@1
+yarn add @trezoa/pay @trezoa/web3.js@1
 ```
 
 ## 2. Parse payment request link
@@ -35,17 +35,17 @@ As a wallet provider, you will have to parse the received URL to extract the par
 <br/>
 
 ```ts
-import { parseURL } from '@solana/pay';
+import { parseURL } from '@trezoa/pay';
 
 /**
  * For example only
  *
- * The URL that triggers the wallet interaction; follows the Solana Pay URL scheme
+ * The URL that triggers the wallet interaction; follows the Trezoa Pay URL scheme
  * The parameters needed to create the correct transaction is encoded within the URL
  */
 const url =
-    'solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678';
-const { recipient, amount, splToken, reference, label, message, memo } = parseURL(url);
+    'trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678';
+const { recipient, amount, trzToken, reference, label, message, memo } = parseURL(url);
 ```
 
 See [full code snippet][9]
@@ -64,11 +64,11 @@ The `payer` **should** be the public key of the current users' wallet.
 <br/>
 
 ```typescript
-import { parseURL, createTransaction } from '@solana/pay';
+import { parseURL, createTransaction } from '@trezoa/pay';
 
 const url =
-    'solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678';
-const { recipient, amount, splToken, reference, label, message, memo } = parseURL(url);
+    'trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&reference=82ZJ7nbGpixjeDCmEhUcmwXYfvurzAgGdtSMuHnUgyny&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId5678';
+const { recipient, amount, trzToken, reference, label, message, memo } = parseURL(url);
 
 /**
  * Create the transaction with the parameters decoded from the URL
@@ -135,7 +135,7 @@ See [full code snippet][11]
 
 ## Deep linking
 
-Wallet providers building for mobile or wearable devices are encouraged to register their app as a handler for the Solana Pay URL scheme `solana:`.
+Wallet providers building for mobile or wearable devices are encouraged to register their app as a handler for the Trezoa Pay URL scheme `trezoa:`.
 
 For example, when a payment request is presented as a QR code, the payer should ideally be able to read the code using the native scanning capability of their device and have the appropriate wallet open with the transaction prefilled.
 
@@ -143,6 +143,6 @@ URLs can be embedded in the environment in web pages, QR codes, NFC tags and pot
 
 <!-- References -->
 
-[9]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L13
-[10]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L27
-[11]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L35
+[9]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L13
+[10]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L27
+[11]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/simulateWalletInteraction.ts#L35

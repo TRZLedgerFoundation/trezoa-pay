@@ -1,4 +1,4 @@
-import type { ConfirmedSignatureInfo, Connection, Finality, SignaturesForAddressOptions } from '@solana/web3.js';
+import type { ConfirmedSignatureInfo, Connection, Finality, SignaturesForAddressOptions } from '@trezoa/web3.js';
 import type { Reference } from './types.js';
 
 /**
@@ -12,7 +12,7 @@ export class FindReferenceError extends Error {
  * Find the oldest transaction signature referencing a given public key.
  *
  * @param connection - A connection to the cluster.
- * @param reference - `reference` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#reference).
+ * @param reference - `reference` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#reference).
  * @param options - Options for `getSignaturesForAddress`.
  *
  * @throws {FindReferenceError}

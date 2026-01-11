@@ -1,8 +1,8 @@
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 
 /** @internal */
-export const SOLANA_PROTOCOL = 'solana:';
+export const SOLANA_PROTOCOL = 'trezoa:';
 
 /** @internal */
 export const HTTPS_PROTOCOL = 'https:';

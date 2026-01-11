@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js"
-import { getOrCreateAssociatedTokenAccount, createTransferCheckedInstruction, getMint } from "@solana/spl-token"
-import { GuestIdentityDriver, keypairIdentity, Metaplex } from "@metaplex-foundation/js"
+import { clusterApiUrl, Connection, Keypair, PublicKey } from "@trezoa/web3.js"
+import { getOrCreateAssociatedTokenAccount, createTransferCheckedInstruction, getMint } from "@trezoa/tpl-token"
+import { GuestIdentityDriver, keypairIdentity, Trezoaplex } from "@trezoaplex-foundation/js"
 import base58 from 'bs58'
 
 // Update these variables!
 // This is returned by nft-upload/upload.js
 const METADATA_URI = "https://arweave.net/1am2-5vjzk639JPAL_FMkswJPfbxe38Ejrmh8CkaAu8"
 
-// Devnet 'fake' USDC, you can get these tokens from https://spl-token-faucet.com/
+// Devnet 'fake' USDC, you can get these tokens from https://tpl-token-faucet.com/
 const USDC_ADDRESS = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr")
 
 // Mainnet USDC, uncomment if using mainnet
@@ -44,7 +44,7 @@ export type PostError = {
 function get(res: NextApiResponse<GetResponse>) {
   res.status(200).json({
     label: "My Store",
-    icon: "https://solana.com/src/img/branding/solanaLogoMark.svg",
+    icon: "https://trezoa.com/src/img/branding/trezoaLogoMark.svg",
   })
 }
 
@@ -56,8 +56,8 @@ async function postImpl(account: PublicKey): Promise<PostResponse> {
   if (!shopPrivateKey) throw new Error('SHOP_PRIVATE_KEY not found')
   const shopKeypair = Keypair.fromSecretKey(base58.decode(shopPrivateKey))
 
-  // Initialise Metaplex with our shop keypair
-  const metaplex = Metaplex
+  // Initialise Trezoaplex with our shop keypair
+  const metaplex = Trezoaplex
     .make(connection)
     .use(keypairIdentity(shopKeypair))
 

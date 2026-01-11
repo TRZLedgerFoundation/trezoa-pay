@@ -1,4 +1,4 @@
-import { TransactionConfirmationStatus, TransactionError, TransactionSignature } from '@solana/web3.js';
+import { TransactionConfirmationStatus, TransactionError, TransactionSignature } from '@trezoa/web3.js';
 import { createContext, useContext } from 'react';
 import { Confirmations } from '../types';
 

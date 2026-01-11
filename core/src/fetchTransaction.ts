@@ -1,5 +1,5 @@
-import type { Commitment, Connection, GetLatestBlockhashConfig, PublicKey } from '@solana/web3.js';
-import { Transaction } from '@solana/web3.js';
+import type { Commitment, Connection, GetLatestBlockhashConfig, PublicKey } from '@trezoa/web3.js';
+import { Transaction } from '@trezoa/web3.js';
 import fetch from 'cross-fetch';
 import { toUint8Array } from 'js-base64';
 import nacl from 'tweetnacl';
@@ -12,11 +12,11 @@ export class FetchTransactionError extends Error {
 }
 
 /**
- * Fetch a transaction from a Solana Pay transaction request link.
+ * Fetch a transaction from a Trezoa Pay transaction request link.
  *
  * @param connection - A connection to the cluster.
  * @param account - Account that may sign the transaction.
- * @param link - `link` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#link).
+ * @param link - `link` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#link).
  * @param options - Options for `getLatestBlockhash`.
  *
  * @throws {FetchTransactionError}

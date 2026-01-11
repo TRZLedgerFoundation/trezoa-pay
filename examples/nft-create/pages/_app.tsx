@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import React from 'react';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
+import { ConnectionProvider, WalletProvider } from '@trezoa/wallet-adapter-react';
+import { WalletModalProvider } from '@trezoa/wallet-adapter-react-ui';
+import { clusterApiUrl } from '@trezoa/web3.js';
 import '../styles/index.css'
 
 // Default styles that can be overridden by your app
-require('@solana/wallet-adapter-react-ui/styles.css');
+require('@trezoa/wallet-adapter-react-ui/styles.css');
 
 function MyApp({ Component, pageProps }: AppProps) {
   // Connection endpoint, switch to a mainnet RPC if using mainnet

@@ -1,11 +1,11 @@
-# Send an NFT as part of a Solana Pay payment
+# Send an NFT as part of a Trezoa Pay payment
 
-This repo demonstrates an example of the following transaction using Solana Pay:
+This repo demonstrates an example of the following transaction using Trezoa Pay:
 
 - Buyer pays X USDC 
 - They're airdropped an NFT as part of the transaction
 
-It uses the new `@metaplex-foundation/js` library which makes NFT instructions much easier to work with!
+It uses the new `@trezoaplex-foundation/js` library which makes NFT instructions much easier to work with!
 
 
 ## Environment variable
@@ -23,7 +23,7 @@ Dependencies are managed with npm. Run `npm install` in this directory to instal
 
 ## Upload NFT metadata
 
-Before an NFT can be created we need to upload its metadata. The easiest way is using Bundlr storage, which Metaplex has a nice plugin for.
+Before an NFT can be created we need to upload its metadata. The easiest way is using Bundlr storage, which Trezoaplex has a nice plugin for.
 
 Uploading is done using the script [upload.js](./nft-upload/upload.js)
 
@@ -59,7 +59,7 @@ const METADATA_URI = "..."
 
 
 
-It first creates a Metaplex `TransactionBuilder` to create an NFT:
+It first creates a Trezoaplex `TransactionBuilder` to create an NFT:
 
 ```ts
   const transactionBuilder = await nfts.builders().create({
@@ -72,7 +72,7 @@ It first creates a Metaplex `TransactionBuilder` to create an NFT:
   })
 ```
 
-By using a transaction builder we can control the conversion to a Solana `Transaction` and then return it.
+By using a transaction builder we can control the conversion to a Trezoa `Transaction` and then return it.
 
 It then creates an SPL token transaction to send USDC from the buyer to the shop:
 
@@ -91,7 +91,7 @@ This instruction is prepended to the NFT transaction, so that it's part of the s
 
 We then convert it to a `Transaction`, and sign it as:
 
-- The shop keypair, which is our Metaplex identity and pays the fees (so the buyer pays no SOL, just USDC)
+- The shop keypair, which is our Trezoaplex identity and pays the fees (so the buyer pays no SOL, just USDC)
 - The mint keypair, which we generate in the API and pass to the NFT create function.
 
 This transaction is only **partially signed**, the USDC instruction additionally requires the user's signature.
@@ -101,7 +101,7 @@ We return this transaction, and the user's wallet will be able to sign it as the
 
 ## Submitting the transaction
 
-The home page is at [index.tsx](./pages/index.tsx). It has code to connect a wallet (using wallet-adapter) and fetch/send the transaction. It also has code to display a QR code that can be scanned by wallets that support Solana Pay, which encodes a call to the checkout API.
+The home page is at [index.tsx](./pages/index.tsx). It has code to connect a wallet (using wallet-adapter) and fetch/send the transaction. It also has code to display a QR code that can be scanned by wallets that support Trezoa Pay, which encodes a call to the checkout API.
 
 Both are an identical transaction. The browser wallets tend to have better error messaging if anything goes wrong, and you'll have access to the browser console too.
 

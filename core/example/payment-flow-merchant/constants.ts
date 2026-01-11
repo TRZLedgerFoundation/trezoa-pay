@@ -1,4 +1,4 @@
-import { Keypair, PublicKey } from '@solana/web3.js';
+import { Keypair, PublicKey } from '@trezoa/web3.js';
 
 export const MERCHANT_WALLET = new PublicKey('mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN');
 

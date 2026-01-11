@@ -3,9 +3,9 @@ title: Create a transfer request
 slug: /core/transfer-request/merchant-integration
 ---
 
-This section describes how a merchant can integrate Solana Pay transfer requests into their payments flow. It shows how to create a payment request link, encode it into a QR code, find the transaction, and validate it.
+This section describes how a merchant can integrate Trezoa Pay transfer requests into their payments flow. It shows how to create a payment request link, encode it into a QR code, find the transaction, and validate it.
 
-This guide walks through an example of a QR code-based Point of Sale system that accepts payments via Solana Pay.
+This guide walks through an example of a QR code-based Point of Sale system that accepts payments via Trezoa Pay.
 
 The complete example code can be found [here][5].
 
@@ -13,41 +13,41 @@ The complete example code can be found [here][5].
 
 Before you can receive payments, you'll need to obtain a native SOL address. This doesn't cost anything, and you can use any wallet to get started.
 
-If you want to receive USDC or another SPL token on Solana, you'll need to create a token account, which may require a small amount of SOL.
+If you want to receive USDC or another SPL token on Trezoa, you'll need to create a token account, which may require a small amount of SOL.
 
 One way to do both is to use Coinbase, which will provide a native SOL deposit address and an associated USDC token account to receive payments.
 
 ---
 
-## 1. Set up Solana Pay
+## 1. Set up Trezoa Pay
 
 Install the packages and import them in your code.
 
 **npm**
 
 ```shell
-npm install @solana/pay @solana/web3.js@1 bignumber.js --save
+npm install @trezoa/pay @trezoa/web3.js@1 bignumber.js --save
 ```
 
 **yarn**
 
 ```shell
-yarn add @solana/pay @solana/web3.js@1 bignumber.js
+yarn add @trezoa/pay @trezoa/web3.js@1 bignumber.js
 ```
 
 ### 1.1 Import necessary modules
 
-Import the modules used to work with Solana Pay.
+Import the modules used to work with Trezoa Pay.
 
 ```typescript
-import { Cluster, clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
-import { encodeURL, createQR } from '@solana/pay';
+import { Cluster, clusterApiUrl, Connection, PublicKey } from '@trezoa/web3.js';
+import { encodeURL, createQR } from '@trezoa/pay';
 import BigNumber from 'bignumber.js';
 ```
 
 ### 1.2 Establish a connection
 
-When working on Solana, you will need to connect to the network. For our example, we will connect to `devnet`.
+When working on Trezoa, you will need to connect to the network. For our example, we will connect to `devnet`.
 
 <details open>
     <summary>
@@ -71,7 +71,7 @@ async function main() {
 
 ## 2. Create a payment request link
 
-Solana Pay uses a [standard URL scheme](../../SPEC.md) across wallets for native SOL and SPL Token payments. Several parameters are encoded within the link representing an intent to collect payment from a customer.
+Trezoa Pay uses a [standard URL scheme](../../SPEC.md) across wallets for native SOL and SPL Token payments. Several parameters are encoded within the link representing an intent to collect payment from a customer.
 
 <details>
     <summary>
@@ -103,7 +103,7 @@ const memo = 'JC#4098';
 /**
  * Create a payment request link
  *
- * Solana Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
@@ -116,7 +116,7 @@ See [full code snippet][6]
 
 ### Optional. SPL token transfer
 
-For SPL Token transfers, use the `spl-token` parameter. The `spl-token` is the mint address of the SPL token.
+For SPL Token transfers, use the `tpl-token` parameter. The `tpl-token` is the mint address of the SPL token.
 
 <details>
     <summary>See code snippet</summary>
@@ -126,19 +126,19 @@ For SPL Token transfers, use the `spl-token` parameter. The `spl-token` is the m
  * Simulate a checkout experience with an SPL token
  */
 console.log('2. 🛍 Simulate a customer checkout \n');
-const splToken = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+const trzToken = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 
 /**
  * Create a payment request link
  *
- * Solana Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
 const url = encodeURL({
     recipient,
     amount,
-    splToken,
+    trzToken,
     reference,
     label,
     message,
@@ -163,7 +163,7 @@ Now that you've created a payment link, you need a way to show it to your custom
 /**
  * Create a payment request link
  *
- * Solana Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
@@ -177,7 +177,7 @@ const qrCode = createQR(url);
 
 <br/>
 
-![qr code](../../images/solana-pay.png)
+![qr code](../../images/trezoa-pay.png)
 
 ### 3.1 Add the QR code to your payment page
 
@@ -347,7 +347,7 @@ See [full code snippet][8]
 
 ## Best practices
 
-We recommend handling a customer session in a secure environment. Building a secure integration with Solana Pay requires a payment flow as follows:
+We recommend handling a customer session in a secure environment. Building a secure integration with Trezoa Pay requires a payment flow as follows:
 
 ![best practices diagram](../../images/transfer-request-best-practice-dark.png)
 
@@ -365,11 +365,11 @@ The steps outlined above prevents:
 
 <!-- References -->
 
-[1]: https://github.com/solana-labs/qr-code-styling
-[2]: https://spl.solana.com/memo
-[3]: https://github.com/solana-labs/solana/issues/19535
-[4]: https://github.com/solana-labs/solana-pay/tree/master/examples/point-of-sale
-[5]: https://github.com/solana-labs/solana-pay/tree/master/core/example/payment-flow-merchant
-[6]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/simulateCheckout.ts
-[7]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/main.ts#L61
-[8]: https://github.com/solana-labs/solana-pay/blob/master/core/example/payment-flow-merchant/main.ts#L105
+[1]: https://github.com/trzledgerfoundation/qr-code-styling
+[2]: https://spl.trezoa.com/memo
+[3]: https://github.com/trzledgerfoundation/trezoa/issues/19535
+[4]: https://github.com/trzledgerfoundation/trezoa-pay/tree/master/examples/point-of-sale
+[5]: https://github.com/trzledgerfoundation/trezoa-pay/tree/master/core/example/payment-flow-merchant
+[6]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/simulateCheckout.ts
+[7]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/main.ts#L61
+[8]: https://github.com/trzledgerfoundation/trezoa-pay/blob/master/core/example/payment-flow-merchant/main.ts#L105

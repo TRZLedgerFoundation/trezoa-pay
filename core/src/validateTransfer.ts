@@ -3,7 +3,7 @@ import {
     getAssociatedTokenAddress,
     isTransferCheckedInstruction,
     isTransferInstruction,
-} from '@solana/spl-token';
+} from '@trezoa/tpl-token';
 import type {
     ConfirmedTransactionMeta,
     Connection,
@@ -12,41 +12,41 @@ import type {
     TransactionInstruction,
     TransactionResponse,
     TransactionSignature,
-} from '@solana/web3.js';
-import { LAMPORTS_PER_SOL, SystemInstruction, Transaction } from '@solana/web3.js';
+} from '@trezoa/web3.js';
+import { LAMPORTS_PER_SOL, SystemInstruction, Transaction } from '@trezoa/web3.js';
 import BigNumber from 'bignumber.js';
 import { MEMO_PROGRAM_ID } from './constants.js';
-import type { Amount, Memo, Recipient, Reference, References, SPLToken } from './types.js';
+import type { Amount, Memo, Recipient, Reference, References, TPLToken } from './types.js';
 
 /**
- * Thrown when a transaction doesn't contain a valid Solana Pay transfer.
+ * Thrown when a transaction doesn't contain a valid Trezoa Pay transfer.
  */
 export class ValidateTransferError extends Error {
     name = 'ValidateTransferError';
 }
 
 /**
- * Fields of a Solana Pay transfer request to validate.
+ * Fields of a Trezoa Pay transfer request to validate.
  */
 export interface ValidateTransferFields {
-    /** `recipient` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#recipient). */
+    /** `recipient` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#recipient). */
     recipient: Recipient;
-    /** `amount` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#amount). */
+    /** `amount` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#amount). */
     amount: Amount;
-    /** `spl-token` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#spl-token). */
-    splToken?: SPLToken;
-    /** `reference` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#reference). */
+    /** `tpl-token` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#tpl-token). */
+    trzToken?: TPLToken;
+    /** `reference` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#reference). */
     reference?: References;
-    /** `memo` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#memo). */
+    /** `memo` in the [Trezoa Pay spec](https://github.com/trzledgerfoundation/trezoa-pay/blob/master/SPEC.md#memo). */
     memo?: Memo;
 }
 
 /**
- * Check that a given transaction contains a valid Solana Pay transfer.
+ * Check that a given transaction contains a valid Trezoa Pay transfer.
  *
  * @param connection - A connection to the cluster.
  * @param signature - The signature of the transaction to validate.
- * @param fields - Fields of a Solana Pay transfer request to validate.
+ * @param fields - Fields of a Trezoa Pay transfer request to validate.
  * @param options - Options for `getTransaction`.
  *
  * @throws {ValidateTransferError}
@@ -54,7 +54,7 @@ export interface ValidateTransferFields {
 export async function validateTransfer(
     connection: Connection,
     signature: TransactionSignature,
-    { recipient, amount, splToken, reference, memo }: ValidateTransferFields,
+    { recipient, amount, trzToken, reference, memo }: ValidateTransferFields,
     options?: { commitment?: Finality }
 ): Promise<TransactionResponse> {
     const response = await connection.getTransaction(signature, options);
@@ -76,8 +76,8 @@ export async function validateTransfer(
     // Transfer instruction must be the last instruction
     const instruction = instructions.pop();
     if (!instruction) throw new ValidateTransferError('missing transfer instruction');
-    const [preAmount, postAmount] = splToken
-        ? await validateSPLTokenTransfer(instruction, message, meta, recipient, splToken, reference)
+    const [preAmount, postAmount] = trzToken
+        ? await validateTPLTokenTransfer(instruction, message, meta, recipient, trzToken, reference)
         : await validateSystemTransfer(instruction, message, meta, recipient, reference);
     if (postAmount.minus(preAmount).lt(amount)) throw new ValidateTransferError('amount not transferred');
 
@@ -128,15 +128,15 @@ async function validateSystemTransfer(
     ];
 }
 
-async function validateSPLTokenTransfer(
+async function validateTPLTokenTransfer(
     instruction: TransactionInstruction,
     message: Message,
     meta: ConfirmedTransactionMeta,
     recipient: Recipient,
-    splToken: SPLToken,
+    trzToken: TPLToken,
     references?: Reference[]
 ): Promise<[BigNumber, BigNumber]> {
-    const recipientATA = await getAssociatedTokenAddress(splToken, recipient);
+    const recipientATA = await getAssociatedTokenAddress(trzToken, recipient);
     const accountIndex = message.accountKeys.findIndex((pubkey) => pubkey.equals(recipientATA));
     if (accountIndex === -1) throw new ValidateTransferError('recipient not found');
 

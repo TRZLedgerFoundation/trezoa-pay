@@ -1,9 +1,9 @@
 {
     "private": true,
-    "name": "@solana/pay-point-of-sale",
+    "name": "@trezoa/pay-point-of-sale",
     "version": "0.0.0",
-    "author": "Solana Maintainers <maintainers@solana.foundation>",
-    "repository": "https://github.com/solana-labs/solana-pay",
+    "author": "Trezoa Maintainers <maintainers@trezoa.foundation>",
+    "repository": "https://github.com/trzledgerfoundation/trezoa-pay",
     "license": "Apache-2.0",
     "engines": {
         "node": ">=16"
@@ -19,13 +19,13 @@
         "proxy": "local-ssl-proxy --source 3001 --target 3000"
     },
     "dependencies": {
-        "@solana/pay": "^0.2.4",
-        "@solana/spl-token": "^0.3.5",
-        "@solana/wallet-adapter-base": "^0.9.16",
-        "@solana/wallet-adapter-react": "^0.15.18",
-        "@solana/wallet-adapter-react-ui": "^0.9.16",
-        "@solana/wallet-adapter-wallets": "^0.18.9",
-        "@solana/web3.js": "^1.56.0",
+        "@trezoa/pay": "^0.2.4",
+        "@trezoa/tpl-token": "^0.3.5",
+        "@trezoa/wallet-adapter-base": "^0.9.16",
+        "@trezoa/wallet-adapter-react": "^0.15.18",
+        "@trezoa/wallet-adapter-react-ui": "^0.9.16",
+        "@trezoa/wallet-adapter-wallets": "^0.18.9",
+        "@trezoa/web3.js": "^1.56.0",
         "bignumber.js": "^9.1.0",
         "bs58": "^4.0.1",
         "cache-manager": "^4.1.0",
