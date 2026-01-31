@@ -74,7 +74,7 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                                     recipient={recipient}
                                     label={label}
                                     message={message}
-                                    symbol="SOL"
+                                    symbol="TRZ"
                                     icon={<TRZIcon />}
                                     decimals={9}
                                     minDecimals={1}

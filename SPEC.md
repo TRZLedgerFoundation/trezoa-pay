@@ -48,7 +48,7 @@ If a value is not provided, the wallet must prompt the user for the amount. If t
 ### TPL Token
 A single `tpl-token` field is allowed as an optional query parameter. The value must be the base58-encoded public key of an TPL Token mint account.
 
-If the field is provided, the [Associated Token Account](https://spl.trezoa.com/associated-token-account) convention must be used, and the wallet must include a `TokenProgram.Transfer` or `TokenProgram.TransferChecked` instruction as the last instruction of the transaction.
+If the field is provided, the [Associated Token Account](https://tpl.trezoa.com/associated-token-account) convention must be used, and the wallet must include a `TokenProgram.Transfer` or `TokenProgram.TransferChecked` instruction as the last instruction of the transaction.
 
 If the field is not provided, the URL describes a native TRZ transfer, and the wallet must include a `SystemProgram.Transfer` instruction as the last instruction of the transaction instead.
 
@@ -72,7 +72,7 @@ A single `message` field is allowed as an optional query parameter. The value mu
 For example, this might be the name of an item being purchased, an order ID, or a thank you note. The wallet should [URL-decode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) the value and display the decoded value to the user.
 
 ### Memo
-A single `memo` field is allowed as an optional query parameter. The value must be a [URL-encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) UTF-8 string that must be included in an [TPL Memo](https://spl.trezoa.com/memo) instruction in the payment transaction.
+A single `memo` field is allowed as an optional query parameter. The value must be a [URL-encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) UTF-8 string that must be included in an [TPL Memo](https://tpl.trezoa.com/memo) instruction in the payment transaction.
 
 The wallet must [URL-decode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) the value and should display the decoded value to the user. The memo will be recorded by validators and should not include private or sensitive information.
 

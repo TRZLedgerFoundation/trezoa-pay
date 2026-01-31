@@ -55,7 +55,7 @@ The checkout API code is at [checkout.ts](./pages/api/checkout.ts)
 const METADATA_URI = "..."
 ```
 
-- You can also set the USDC address (or change the SPL token), the RPC endpoint, the created NFT name and the USDC price in variables at the top of this file. 
+- You can also set the USDC address (or change the TPL token), the RPC endpoint, the created NFT name and the USDC price in variables at the top of this file. 
 
 
 
@@ -74,7 +74,7 @@ It first creates a Trezoaplex `TransactionBuilder` to create an NFT:
 
 By using a transaction builder we can control the conversion to a Trezoa `Transaction` and then return it.
 
-It then creates an SPL token transaction to send USDC from the buyer to the shop:
+It then creates an TPL token transaction to send USDC from the buyer to the shop:
 
 ```ts
   const usdcTransferInstruction = createTransferCheckedInstruction(
@@ -91,7 +91,7 @@ This instruction is prepended to the NFT transaction, so that it's part of the s
 
 We then convert it to a `Transaction`, and sign it as:
 
-- The shop keypair, which is our Trezoaplex identity and pays the fees (so the buyer pays no SOL, just USDC)
+- The shop keypair, which is our Trezoaplex identity and pays the fees (so the buyer pays no TRZ, just USDC)
 - The mint keypair, which we generate in the API and pass to the NFT create function.
 
 This transaction is only **partially signed**, the USDC instruction additionally requires the user's signature.

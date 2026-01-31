@@ -54,7 +54,7 @@ import { createTransfer, encodeURL, findReference, parseURL, validateTransfer } 
         await createAssociatedTokenAccount(connection, wallet, trzToken, wallet.publicKey, { commitment: 'confirmed' });
     }
 
-    // Create a transaction to transfer native SOL or SPL tokens
+    // Create a transaction to transfer native TRZ or TPL tokens
     const transaction = await createTransfer(connection, wallet.publicKey, {
         recipient,
         amount,

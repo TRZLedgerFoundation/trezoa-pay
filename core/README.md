@@ -4,7 +4,7 @@
 
 ## Why use Trezoa Pay
 
-Businesses and developers can use Trezoa Pay to accept payments in SOL or any SPL token without intermediaries. It offers frictionless and portable integration options like payment links, pay now buttons or QR codes on your app, dApp, website, blog, and so much more.
+Businesses and developers can use Trezoa Pay to accept payments in TRZ or any TPL token without intermediaries. It offers frictionless and portable integration options like payment links, pay now buttons or QR codes on your app, dApp, website, blog, and so much more.
 
 ## How it works
 
@@ -39,7 +39,7 @@ A Trezoa Pay transaction request URL describes an interactive request for any Tr
 
 ### Transfer Requests
 
-A Trezoa Pay transfer request URL describes a non-interactive request for a SOL or SPL Token transfer. The parameters in the URL are used by a wallet to directly compose the transaction.
+A Trezoa Pay transfer request URL describes a non-interactive request for a TRZ or TPL Token transfer. The parameters in the URL are used by a wallet to directly compose the transaction.
 
 - [Create a transfer request](https://docs.trezoapay.com/core/transfer-request/merchant-integration)
 - [Handle a transfer request](https://docs.trezoapay.com/core/transfer-request/wallet-integration)

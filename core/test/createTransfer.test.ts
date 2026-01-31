@@ -2,7 +2,7 @@ import { Keypair, type PublicKey, SystemProgram, Transaction } from '@trezoa/web
 import BigNumber from 'bignumber.js';
 import { createTransfer, CreateTransferError } from '../src';
 import type { Connection } from '@trezoa/web3.js';
-import * as spl from '@trezoa/tpl-token';
+import * as tpl from '@trezoa/tpl-token';
 
 jest.mock('@trezoa/tpl-token', () => {
     const actual = jest.requireActual('@trezoa/tpl-token');
@@ -14,7 +14,7 @@ jest.mock('@trezoa/tpl-token', () => {
     };
 });
 
-const mockedTplToken = jest.mocked(spl);
+const mockedTplToken = jest.mocked(tpl);
 
 // Test Constants
 const TEST_AMOUNTS = {
@@ -148,7 +148,7 @@ class TestHelpers {
     static setupTplTokenMocks(
         connection: jest.Mocked<Connection>,
         fixtures: TestFixtures,
-        tokenProgram: PublicKey = spl.TOKEN_PROGRAM_ID
+        tokenProgram: PublicKey = tpl.TOKEN_PROGRAM_ID
     ) {
         this.setupBasicMocks(connection, fixtures);
 
@@ -277,13 +277,13 @@ describe('createTransfer', () => {
                 tplToken: fixtures.tplToken,
             });
 
-            TestHelpers.assertTplTokenTransfer(transaction, fixtures, spl.TOKEN_PROGRAM_ID);
+            TestHelpers.assertTplTokenTransfer(transaction, fixtures, tpl.TOKEN_PROGRAM_ID);
             expect(mockedTplToken.getMint).toHaveBeenCalledTimes(1);
             expect(mockedTplToken.getAccount).toHaveBeenCalledTimes(2);
         });
 
         it('should create a valid Token-2022 transfer transaction', async () => {
-            TestHelpers.setupTplTokenMocks(connection, fixtures, spl.TOKEN_2022_PROGRAM_ID);
+            TestHelpers.setupTplTokenMocks(connection, fixtures, tpl.TOKEN_2022_PROGRAM_ID);
 
             const transaction = await createTransfer(connection, fixtures.sender, {
                 recipient: fixtures.recipient,
@@ -291,14 +291,14 @@ describe('createTransfer', () => {
                 tplToken: fixtures.tplToken,
             });
 
-            TestHelpers.assertTplTokenTransfer(transaction, fixtures, spl.TOKEN_2022_PROGRAM_ID);
+            TestHelpers.assertTplTokenTransfer(transaction, fixtures, tpl.TOKEN_2022_PROGRAM_ID);
         });
 
         describe('TPL Token validation errors', () => {
             it('should throw when mint is not initialized', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(
@@ -321,7 +321,7 @@ describe('createTransfer', () => {
             it('should throw when sender token account is not initialized', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(
@@ -353,7 +353,7 @@ describe('createTransfer', () => {
             it('should throw when sender token account is frozen', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(
@@ -386,7 +386,7 @@ describe('createTransfer', () => {
             it('should throw when recipient token account is not initialized', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(
@@ -430,7 +430,7 @@ describe('createTransfer', () => {
             it('should throw when recipient token account is frozen', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(
@@ -474,7 +474,7 @@ describe('createTransfer', () => {
             it('should throw when sender has insufficient token balance', async () => {
                 TestHelpers.setupBasicMocks(connection, fixtures);
                 connection.getParsedAccountInfo.mockResolvedValue(
-                    MockFactories.createParsedAccountInfo(spl.TOKEN_PROGRAM_ID)
+                    MockFactories.createParsedAccountInfo(tpl.TOKEN_PROGRAM_ID)
                 );
 
                 mockedTplToken.getMint.mockResolvedValue(

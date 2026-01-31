@@ -5,7 +5,7 @@ slug: /core/transaction-request/merchant-integration
 
 This section describes how a merchant can integrate Trezoa Pay transaction requests into their payments flow.
 
-This guide walks through an example of how you can configure a server to respond to a Trezoa Pay transaction request to initiate a simple native SOL transfer.
+This guide walks through an example of how you can configure a server to respond to a Trezoa Pay transaction request to initiate a simple native TRZ transfer.
 
 A complete example can be found [here][4].
 
@@ -99,7 +99,7 @@ const post = async (request, response) => {
 
     const sender = new PublicKey(accountField);
 
-    // create spl transfer instruction
+    // create tpl transfer instruction
     const splTransferIx = await createSplTransferIx(sender, connection);
 
     // create the transaction
@@ -134,7 +134,7 @@ The `transaction` that's returned can be -- anything. It doesn't even need to be
 
 -   Merchants get an atomic bidirectional communication channel with customers. They can mint an NFT or transfer loyalty reward tokens in the transaction.
 -   Merchants could potentially see what tokens a user has, accepting and denominating payment in any of them.
--   Merchants can pay for transactions on their user's behalf so they don't need SOL in a wallet.
+-   Merchants can pay for transactions on their user's behalf so they don't need TRZ in a wallet.
 -   Merchants can return an error from the server to decline to respond with a transaction. This could be used to allow permissioned payments.
 -   Payments can be directed to escrow-like programs, enabling things like refunds, chargebacks, and other return mechanisms.
 -   DeFi transactions could be bridged to all kinds of web2 / IRL portals.
@@ -173,7 +173,7 @@ async function createSplTransferIx(sender, connection) {
     const tokens = BigInt(String(amount));
     if (tokens > senderAccount.amount) throw new Error('insufficient funds');
 
-    // Create an instruction to transfer SPL tokens, asserting the mint and decimals match
+    // Create an instruction to transfer TPL tokens, asserting the mint and decimals match
     const splTransferIx = createTransferCheckedInstruction(
         senderATA,
         trzToken,
@@ -195,7 +195,7 @@ async function createSplTransferIx(sender, connection) {
 }
 ```
 
-For our example, we create a simple transfer for a SPL token, serialize the transaction, and base64 encode it.
+For our example, we create a simple transfer for a TPL token, serialize the transaction, and base64 encode it.
 
 ## Best Practices
 

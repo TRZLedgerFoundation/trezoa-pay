@@ -11,11 +11,11 @@ The complete example code can be found [here][5].
 
 ## Requirements
 
-Before you can receive payments, you'll need to obtain a native SOL address. This doesn't cost anything, and you can use any wallet to get started.
+Before you can receive payments, you'll need to obtain a native TRZ address. This doesn't cost anything, and you can use any wallet to get started.
 
-If you want to receive USDC or another SPL token on Trezoa, you'll need to create a token account, which may require a small amount of SOL.
+If you want to receive USDC or another TPL token on Trezoa, you'll need to create a token account, which may require a small amount of TRZ.
 
-One way to do both is to use Coinbase, which will provide a native SOL deposit address and an associated USDC token account to receive payments.
+One way to do both is to use Coinbase, which will provide a native TRZ deposit address and an associated USDC token account to receive payments.
 
 ---
 
@@ -71,7 +71,7 @@ async function main() {
 
 ## 2. Create a payment request link
 
-Trezoa Pay uses a [standard URL scheme](../../SPEC.md) across wallets for native SOL and SPL Token payments. Several parameters are encoded within the link representing an intent to collect payment from a customer.
+Trezoa Pay uses a [standard URL scheme](../../SPEC.md) across wallets for native TRZ and TPL Token payments. Several parameters are encoded within the link representing an intent to collect payment from a customer.
 
 <details>
     <summary>
@@ -103,7 +103,7 @@ const memo = 'JC#4098';
 /**
  * Create a payment request link
  *
- * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native TRZ and TPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
@@ -114,16 +114,16 @@ See [full code snippet][6]
 
 </details>
 
-### Optional. SPL token transfer
+### Optional. TPL token transfer
 
-For SPL Token transfers, use the `tpl-token` parameter. The `tpl-token` is the mint address of the SPL token.
+For TPL Token transfers, use the `tpl-token` parameter. The `tpl-token` is the mint address of the TPL token.
 
 <details>
     <summary>See code snippet</summary>
 
 ```typescript
 /**
- * Simulate a checkout experience with an SPL token
+ * Simulate a checkout experience with an TPL token
  */
 console.log('2. 🛍 Simulate a customer checkout \n');
 const trzToken = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
@@ -131,7 +131,7 @@ const trzToken = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 /**
  * Create a payment request link
  *
- * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native TRZ and TPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
@@ -163,7 +163,7 @@ Now that you've created a payment link, you need a way to show it to your custom
 /**
  * Create a payment request link
  *
- * Trezoa Pay uses a standard URL scheme across wallets for native SOL and SPL Token payments.
+ * Trezoa Pay uses a standard URL scheme across wallets for native TRZ and TPL Token payments.
  * Several parameters are encoded within the link representing an intent to collect payment from a customer.
  */
 console.log('3. 💰 Create a payment request link \n');
@@ -366,7 +366,7 @@ The steps outlined above prevents:
 <!-- References -->
 
 [1]: https://github.com/trzledgerfoundation/qr-code-styling
-[2]: https://spl.trezoa.com/memo
+[2]: https://tpl.trezoa.com/memo
 [3]: https://github.com/trzledgerfoundation/trezoa/issues/19535
 [4]: https://github.com/trzledgerfoundation/trezoa-pay/tree/master/examples/point-of-sale
 [5]: https://github.com/trzledgerfoundation/trezoa-pay/tree/master/core/example/payment-flow-merchant

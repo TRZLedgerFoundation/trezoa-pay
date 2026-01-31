@@ -58,7 +58,7 @@ export async function createTransfer(
     const recipientInfo = await connection.getAccountInfo(recipient);
     if (!recipientInfo) throw new CreateTransferError('recipient not found');
 
-    // A native SOL or SPL token transfer instruction
+    // A native TRZ or TPL token transfer instruction
     const instruction = trzToken
         ? await createTPLTokenInstruction(recipient, amount, trzToken, sender, connection)
         : await createSystemInstruction(recipient, amount, sender, connection);
@@ -115,7 +115,7 @@ async function createSystemInstruction(
     if (!recipientInfo.owner.equals(SystemProgram.programId)) throw new CreateTransferError('recipient owner invalid');
     if (recipientInfo.executable) throw new CreateTransferError('recipient executable');
 
-    // Check that the amount provided doesn't have greater precision than SOL
+    // Check that the amount provided doesn't have greater precision than TRZ
     if ((amount.decimalPlaces() ?? 0) > SOL_DECIMALS) throw new CreateTransferError('amount decimals invalid');
 
     // Convert input decimal amount to integer lamports
@@ -125,7 +125,7 @@ async function createSystemInstruction(
     const lamports = amount.toNumber();
     if (lamports > senderInfo.lamports) throw new CreateTransferError('insufficient funds');
 
-    // Create an instruction to transfer native SOL
+    // Create an instruction to transfer native TRZ
     return SystemProgram.transfer({
         fromPubkey: sender,
         toPubkey: recipient,
@@ -172,7 +172,7 @@ async function createTPLTokenInstruction(
     const tokens = BigInt(String(amount));
     if (tokens > senderAccount.amount) throw new CreateTransferError('insufficient funds');
 
-    // Create an instruction to transfer SPL tokens, asserting the mint and decimals match
+    // Create an instruction to transfer TPL tokens, asserting the mint and decimals match
     return createTransferCheckedInstruction(
         senderATA,
         trzToken,

@@ -19,7 +19,7 @@ export async function simulateWalletInteraction(connection: Connection, url: URL
     /**
      * For example only
      *
-     * Attempts to airdrop the customers wallet some SOL for a succeful transaction
+     * Attempts to airdrop the customers wallet some TRZ for a succeful transaction
      */
     await getPayer(connection);
 

@@ -141,7 +141,7 @@ async function validateTPLTokenTransfer(
     if (accountIndex === -1) throw new ValidateTransferError('recipient not found');
 
     if (references) {
-        // Check that the first instruction is an SPL token transfer instruction.
+        // Check that the first instruction is an TPL token transfer instruction.
         const decodedInstruction = decodeInstruction(instruction);
         if (!isTransferCheckedInstruction(decodedInstruction) && !isTransferInstruction(decodedInstruction))
             throw new ValidateTransferError('invalid transfer');

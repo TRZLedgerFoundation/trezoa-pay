@@ -83,22 +83,22 @@ See [full code snippet][10]
 
 This transaction **should** represent the original intent of the payment request link. The example implementation walks through the steps on how to construct the transaction:
 
-**Native SOL transfer**
+**Native TRZ transfer**
 
 1. Check that the payer and recipient accounts exist
 2. Check the payer and recipient are valid native accounts
 3. Check the payer has enough lamports for the transfer
-4. Create an instruction to transfer native SOL
+4. Create an instruction to transfer native TRZ
 5. If references were included, add them to the instruction
 6. If a memo was included, create an instruction for the memo program
 
-**SPL token transfer**
+**TPL token transfer**
 
 1. Check that the payer and recipient accounts exist
 2. Check the token provided is an initialized mint
 3. Check the payer and recipient's Associated Token Account (ATA) exists
 4. Check the payer has enough lamports for the transfer
-5. Create an instruction to transfer SPL tokens
+5. Create an instruction to transfer TPL tokens
 6. If references were included, add them to the instruction
 7. If a memo was included, create an instruction for the memo program
 

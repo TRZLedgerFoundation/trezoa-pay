@@ -26,17 +26,17 @@ To build and run this app locally, you'll need:
     1. Click the settings icon in the Phantom window
     2. Select the "Change network" option and select "Devnet"
 
-    #### 4. Airdrop SOL to customer wallet
+    #### 4. Airdrop TRZ to customer wallet
 
-    Use [solfaucet][3] to airdrop SOL to the customer wallet.
+    Use [solfaucet][3] to airdrop TRZ to the customer wallet.
 
-    > You'll need SOL in the customer wallet to pay for the goods/services + transaction fees
+    > You'll need TRZ in the customer wallet to pay for the goods/services + transaction fees
 
  </details>
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the trezoa up and running on your local machine for development and testing purposes.
 
 ### Clone the repository
 
@@ -139,13 +139,13 @@ The generated QR codes in the app should now use transaction requests. To see wh
 
 You can deploy this point of sale app to Vercel with a few clicks.
 
-### 1. Fork the project
+### 1. Fork the trezoa
 
 Fork the Trezoa Pay repository
 
 ### 2. Login to Vercel
 
-Login to Vercel and create a new project
+Login to Vercel and create a new trezoa
 
 ![](./setup/1.New.png)
 
@@ -155,17 +155,17 @@ Import the forked repository from GitHub.
 
 > If you're forked repository is not listed, you'll need to adjust your GitHub app permissions. Search for the and select the `Missing Git repository? Adjust GitHub App Permissions` option.
 
-### 3. Configure project
+### 3. Configure trezoa
 
 Choose `point-of-sale` as the root directory:
 
 ![](./setup/3.Root_directory.png)
 
-Configure the project as follows:
+Configure the trezoa as follows:
 
 ![](./setup/4.Configuration.png)
 
-### Deploy project
+### Deploy trezoa
 
 Once the deployment finishes, navigate to
 

@@ -57,11 +57,11 @@ async function postImpl(account: PublicKey): Promise<PostResponse> {
   const shopKeypair = Keypair.fromSecretKey(base58.decode(shopPrivateKey))
 
   // Initialise Trezoaplex with our shop keypair
-  const metaplex = Trezoaplex
+  const trezoaplex = Trezoaplex
     .make(connection)
     .use(keypairIdentity(shopKeypair))
 
-  const nfts = metaplex.nfts()
+  const nfts = trezoaplex.nfts()
 
   // The mint needs to sign the transaction, so we generate a new keypair for it
   const mintKeypair = Keypair.generate()

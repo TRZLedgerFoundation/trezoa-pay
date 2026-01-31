@@ -13,7 +13,7 @@ Rough consensus on this spec has been reached, and implementations exist in Phan
 This standard draws inspiration from [BIP 21](https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki) and [EIP 681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md).
 
 ## Motivation
-A standard URL protocol for requesting native SOL transfers, SPL Token transfers, and Trezoa transactions allows for a better user experience across apps and wallets in the Trezoa ecosystem.
+A standard URL protocol for requesting native TRZ transfers, TPL Token transfers, and Trezoa transactions allows for a better user experience across apps and wallets in the Trezoa ecosystem.
 
 These URLs may be encoded in QR codes or NFC tags, or sent between users and applications to request payment and compose transactions.
 
@@ -25,7 +25,7 @@ By standardizing a simple approach to solving these problems, we ensure basic co
 
 ## Specification: Transfer Request
 
-A Trezoa Pay transfer request URL describes a non-interactive request for a SOL or SPL Token transfer.
+A Trezoa Pay transfer request URL describes a non-interactive request for a TRZ or TPL Token transfer.
 ```html
 trezoa:<recipient>
       ?amount=<amount>
@@ -39,23 +39,23 @@ trezoa:<recipient>
 The request is non-interactive because the parameters in the URL are used by a wallet to directly compose a transaction.
 
 ### Recipient
-A single `recipient` field is required as the pathname. The value must be the base58-encoded public key of a native SOL account. Associated token accounts must not be used.
+A single `recipient` field is required as the pathname. The value must be the base58-encoded public key of a native TRZ account. Associated token accounts must not be used.
 
-Instead, to request an SPL Token transfer, the `tpl-token` field must be used to specify an SPL Token mint, from which the associated token address of the recipient must be derived.
+Instead, to request an TPL Token transfer, the `tpl-token` field must be used to specify an TPL Token mint, from which the associated token address of the recipient must be derived.
 
 ### Amount
-A single `amount` field is allowed as an optional query parameter. The value must be a non-negative integer or decimal number of "user" units. For SOL, that's SOL and not lamports. For tokens, use [`uiAmountString` and not `amount`](https://docs.trezoa.com/developing/clients/jsonrpc-api#token-balances-structure).
+A single `amount` field is allowed as an optional query parameter. The value must be a non-negative integer or decimal number of "user" units. For TRZ, that's TRZ and not lamports. For tokens, use [`uiAmountString` and not `amount`](https://docs.trezoa.com/developing/clients/jsonrpc-api#token-balances-structure).
 
 `0` is a valid value. If the value is a decimal number less than `1`, it must have a leading `0` before the `.`. Scientific notation is prohibited.
 
-If a value is not provided, the wallet must prompt the user for the amount. If the number of decimal places exceed what's supported for SOL (9) or the SPL Token (mint specific), the wallet must reject the URL as **malformed**.
+If a value is not provided, the wallet must prompt the user for the amount. If the number of decimal places exceed what's supported for TRZ (9) or the TPL Token (mint specific), the wallet must reject the URL as **malformed**.
 
-### SPL Token
-A single `tpl-token` field is allowed as an optional query parameter. The value must be the base58-encoded public key of an SPL Token mint account.
+### TPL Token
+A single `tpl-token` field is allowed as an optional query parameter. The value must be the base58-encoded public key of an TPL Token mint account.
 
-If the field is provided, the [Associated Token Account](https://spl.trezoa.com/associated-token-account) convention must be used, and the wallet must include a `TokenProgram.Transfer` or `TokenProgram.TransferChecked` instruction as the last instruction of the transaction.
+If the field is provided, the [Associated Token Account](https://tpl.trezoa.com/associated-token-account) convention must be used, and the wallet must include a `TokenProgram.Transfer` or `TokenProgram.TransferChecked` instruction as the last instruction of the transaction.
 
-If the field is not provided, the URL describes a native SOL transfer, and the wallet must include a `SystemProgram.Transfer` instruction as the last instruction of the transaction instead.
+If the field is not provided, the URL describes a native TRZ transfer, and the wallet must include a `SystemProgram.Transfer` instruction as the last instruction of the transaction instead.
 
 The wallet must derive the ATA address from the `recipient` and `tpl-token` fields. Transfers to auxiliary token accounts are not supported.
 
@@ -77,15 +77,15 @@ A single `message` field is allowed as an optional query parameter. The value mu
 For example, this might be the name of an item being purchased, an order ID, or a thank you note. The wallet should [URL-decode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) the value and display the decoded value to the user.
 
 ### Memo
-A single `memo` field is allowed as an optional query parameter. The value must be a [URL-encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) UTF-8 string that must be included in an [SPL Memo](https://spl.trezoa.com/memo) instruction in the payment transaction.
+A single `memo` field is allowed as an optional query parameter. The value must be a [URL-encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) UTF-8 string that must be included in an [TPL Memo](https://tpl.trezoa.com/memo) instruction in the payment transaction.
 
 The wallet must [URL-decode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) the value and should display the decoded value to the user. The memo will be recorded by validators and should not include private or sensitive information.
 
-If the field is provided, the wallet must include a `MemoProgram` instruction as the second to last instruction of the transaction, immediately before the SOL or SPL Token transfer instruction, to avoid ambiguity with other instructions in the transaction.
+If the field is provided, the wallet must include a `MemoProgram` instruction as the second to last instruction of the transaction, immediately before the TRZ or TPL Token transfer instruction, to avoid ambiguity with other instructions in the transaction.
 
 ### Examples
 
-##### URL describing a transfer request for 1 SOL.
+##### URL describing a transfer request for 1 TRZ.
 ```
 trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=1&label=Michael&message=Thanks%20for%20all%20the%20fish&memo=OrderId12345
 ```
@@ -95,7 +95,7 @@ trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=1&label=Michael&messag
 trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&tpl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
 ```
 
-##### URL describing a transfer request for SOL. The user must be prompted for the amount.
+##### URL describing a transfer request for TRZ. The user must be prompted for the amount.
 ```
 trezoa:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN&label=Michael
 ```
